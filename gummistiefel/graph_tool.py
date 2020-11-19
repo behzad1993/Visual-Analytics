@@ -1,6 +1,12 @@
+"""
+Created on Nov 15, 2020
+
+@author: Akhmad
+"""
+
 import plotly.express as px
 
-custom_labels = {"start": "date", "si": "size"}
+custom_labels = {"start": "start", "si": "si"}
 
 
 def getGraph(df, x_column, y_column):
