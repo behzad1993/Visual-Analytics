@@ -13,11 +13,13 @@ main_url = "http://rz-vm154.gfz-potsdam.de:8080/highprecip/events/"
 
 def getRequest(id):
     request_url = main_url + "get?id=" + id
-    # print(request_url)
-    response_json = requests.get(request_url)
-    return response_json
+    try:
+        response_json = requests.get(request_url)
+        return response_json
+    except Exception as e: 
+        print(e)
 
-
+    
 def queryRequest(parameters):
     request_url = main_url + "query?"
     for parameter in parameters:
@@ -27,8 +29,6 @@ def queryRequest(parameters):
     return response_json
 
 # Depreacted
-
-
 def getDataframeForGraph(parameters):
     response = queryRequest(parameters)
     df = pd.read_json(response.text)
@@ -52,13 +52,12 @@ def getDataframeFromServer(parameters, fullData=False):
 
         for timeserie in event_dict["timeseries"]:
             if(fullData):
-                timeserie["main_area"] = main_area
-                timeserie["main_length"] = main_length
-                timeserie["main_si"] = main_si
-                timeserie["main_start"] = main_start
+                timeserie["event_area"] = main_area
+                timeserie["event_length"] = main_length
+                timeserie["event_si"] = main_si
+                timeserie["event_start"] = main_start
             dfs.append(timeserie)
+    
     data = pd.DataFrame(dfs)
-    data = data.rename(columns={"area": "event_area", "date": "event_date",
-                                "index": "event_id", "lat": "event_lat", "latMax": "event_latMax", "lon": "event_lon",
-                                "lonMax": "event_lonMax", "maxPrec": "event_maxPrec", "meanPre": "event_meanPre", "si": "event_si", "size": "event_size", "stdv": "event_stdv"})
+    
     return data
