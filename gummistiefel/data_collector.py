@@ -12,11 +12,10 @@ from request_tool import getRequest
 response = requests.get("http://rz-vm154.gfz-potsdam.de:8080/highprecip/events/query") 
 json = response.json()
 
-
 dfs = []
 num_events = len(json)
 
-for index, event in enumerate(json[0:100000]):
+for index, event in enumerate(json[0:500000]):
     print("Requesting {}/{}".format(index, num_events))
     
     event_id = event['id']
@@ -38,6 +37,8 @@ for index, event in enumerate(json[0:100000]):
 data = pd.DataFrame(dfs)
 data = data.rename(columns={'index':'event_id'})
 
+
+data.to_csv("Events_0_50000.csv")
 
 
 
