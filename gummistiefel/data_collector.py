@@ -15,7 +15,7 @@ json = response.json()
 dfs = []
 num_events = len(json)
 
-for index, event in enumerate(json[0:500000]):
+for index, event in enumerate(json[0:50000]):
     print("Requesting {}/{}".format(index, num_events))
     
     event_id = event['id']
