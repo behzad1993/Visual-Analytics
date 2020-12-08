@@ -20,7 +20,7 @@ def getGraph(df, x_column, y_column):
 
 def getMap(df):
     # https://plotly.com/python/mapbox-layers/
-    fig = px.scatter_mapbox(df, lat="event_lat", lon="event_lon", hover_name="main_start", hover_data=["event_stdv", "event_si"],
+    fig = px.scatter_mapbox(df, lat="lat", lon="lon", hover_name="event_start", hover_data=["stdv", "si"],
                             color_discrete_sequence=["fuchsia"], zoom=3, height=300)
     fig.update_layout(mapbox_style="open-street-map")
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})

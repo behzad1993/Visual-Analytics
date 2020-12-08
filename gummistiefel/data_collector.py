@@ -15,7 +15,7 @@ json = response.json()
 dfs = []
 num_events = len(json)
 
-for index, event in enumerate(json[0:50000]):
+for index, event in enumerate(json):
     print("Requesting {}/{}".format(index, num_events))
     
     event_id = event['id']
@@ -38,7 +38,7 @@ data = pd.DataFrame(dfs)
 data = data.rename(columns={'index':'event_id'})
 
 
-data.to_csv("Events_0_50000.csv")
+data.to_csv("events_all.csv")
 
 
 
