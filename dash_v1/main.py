@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Dec 14 15:03:35 2020
-
 @author: David
 """
 
@@ -103,7 +102,8 @@ html.Div([
     html.Div([
         
        #Filter Year 
-       html.P("Filter by year:",className="control_label"),
+       html.P("Year",className="control_label"),
+       html.Div(id='output_year',className="filter-label"),
        dcc.RangeSlider(
            id='year_slider',
            min=1979,
@@ -119,12 +119,12 @@ html.Div([
                2010: {'label': '2010'},
                2015: {'label': '2015'}
            },
-           included=False
+           included=True
        )  ,
-       html.Div(id='output_year'),
        
        #Filter Year 
-       html.P("Filter by month:",className="control_label"),
+       html.P("Month",className="control_label"),
+       html.Div(id='output_month',className="filter-label"),
        dcc.RangeSlider(
            id='month_slider',
            min=1,
@@ -144,12 +144,12 @@ html.Div([
                11: {'label': '11'},
                12: {'label': '12'}
            },
-           included=False
-       )  ,
-       html.Div(id='output_month'),
+           included=True
+       ),
        
        #Filter Severity
-       html.P("Filter by severity:",className="control_label"),
+       html.P("Severity",className="control_label"),
+       html.Div(id='output_si',className="filter-label"),
        dcc.RangeSlider(
            id='si_slider',
            min=0,
@@ -163,11 +163,12 @@ html.Div([
                200: {'label': '2'},
                250: {'label': '2.5'}
            },
-           included=False
-       ),html.Div(id='output_si'),
+           included=True
+       ),
        
        #Filter Area
-       html.P("Filter by area:",className="control_label"),
+       html.P("Area",className="control_label"),
+       html.Div(id='output_area',className="filter-label"),
        dcc.RangeSlider(
            id='area_slider',
            min=0,
@@ -181,11 +182,12 @@ html.Div([
                200: {'label': '200'}
                             
            },
-           included=False
-       ),html.Div(id='output_area'),
+           included=True
+       ),
           
        #Filter Hours
-       html.P("Filter by hours:",className="control_label"),
+       html.P("Hour",className="control_label"),
+       html.Div(id='output_hours',className="filter-label"),
        dcc.RangeSlider(
            id='hours_slider',
            min=1,
@@ -198,12 +200,13 @@ html.Div([
                24: {'label': '24'},
                100: {'label': '100'},                        
            },
-           included=False
-       ),html.Div(id='output_hours'),
+           included=True
+       ),
       
        #Select color-map-feature radio button
        html.P("Select variable as color:",className="control_label"),
        dcc.RadioItems(
+           className="control_label",
            id='map_size_radio_items',
            options=[
                {'label': 'Year', 'value': 'event_year'},
@@ -214,14 +217,14 @@ html.Div([
        ),html.Div(id='output_size_button'),
 
        #Select country
-       html.P("Select country",className="control_label"),                          
+       html.P("Country",className="control_label"),                          
         dcc.Dropdown(
             id="country_selector",
             options=countries_options,
             multi=True,
             value=country_list,
             className="dcc_control",
-        ),html.Div(id='output_country_list'),
+        ),#html.Div(id='output_country_list'),
            
                               
        ],             
@@ -356,11 +359,11 @@ def update_filter_area(area_slider):
 def update_filter_hours(hours_slider):
     return str(hours_slider)
 
-@app.callback(
-    Output("output_country_list", "children"),
-    [Input("country_selector", "value")])
-def update_filter_hours(country_selector):
-    return str(country_selector)
+# @app.callback(
+#     Output("output_country_list", "children"),
+#     [Input("country_selector", "value")])
+# def update_filter_hours(country_selector):
+#     return str(country_selector)
 
 # @app.callback(
 #     Output("output_size_button", "children"),
@@ -619,4 +622,3 @@ def plot_count_month(year_range, month_range, si_range, area_range, map_size_rad
 
 if __name__ == "__main__":
     app.run_server(debug=True)
-
