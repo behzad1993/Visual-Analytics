@@ -12,7 +12,7 @@ Created on Mon Dec 14 15:03:35 2020
 #!pip install pandas
 #!pip install numpy
 #!pip install matplotlib
-
+#!pip install dash_daq
 
 import os
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
@@ -25,7 +25,7 @@ import dash
 from dash.dependencies import Input, Output, State, ClientsideFunction
 import dash_core_components as dcc
 import dash_html_components as html
-
+import dash_daq as daq
 
 # =============================================================================
 # Settinga & Data
@@ -102,11 +102,65 @@ app.layout = html.Div([
      ),
 
 # =============================================================================
-# Filters                
+# EINZEL / VERGLEICH SLIDER #TODO: Implement Slider instead of dropdown            
 # =============================================================================
+
+
+
+
+#DIV ROW 2
+html.Div(
+[
+html.Div(
+html.Label("Individual analysis"),
+  className="five columns",
+  style={'textAlign': 'right'}
+),
+html.Div(
+   
+    
+   
 html.Div([
-    html.Div([
-        
+daq.ToggleSwitch(size=60,
+id='my-input',
+value=False
+),
+
+
+
+html.Div(id='toggle-switch-output')
+]),
+   className="two columns",
+),
+
+html.Div(
+html.Label("Comparative analysis"),
+  className="five columns",
+  style={'textAlign': 'left'}
+),
+
+
+],
+className="row flex-display",
+),
+
+
+
+# =============================================================================
+# CONTAINER SINGLE START
+# =============================================================================
+
+html.Div(
+    id="single-container", 
+    children = [    
+
+
+# =============================================================================
+# Filters SINGLE               
+# =============================================================================
+
+html.Div([
+    html.Div([        
        #Filter Year 
        html.P("Year",className="control_label"),
        html.Div(id='output_year',className="filter-label"),
@@ -234,7 +288,7 @@ html.Div([
            
                               
        ],             
-    className="pretty_container four columns",
+    className="pretty_container five columns",
     id="cross-filter-options",
 ),
 
@@ -257,17 +311,17 @@ html.Div([
  ), #END DIV ROW 1
 
 
-    
+
 #DIV ROW 2
     html.Div(
         [
             html.Div(
                 [dcc.Graph(id="count_year_graph")],
-                  className="pretty_container seven columns",
+                  className="pretty_container six columns",
             ),
             html.Div(
                 [dcc.Graph(id="map_events_graph")],
-                  className="pretty_container five columns",
+                  className="pretty_container six columns",
             ),
         ],
         className="row flex-display",
@@ -278,20 +332,338 @@ html.Div([
         [
             html.Div(
                 [dcc.Graph(id="count_month_graph")],
-                className="pretty_container seven columns",
+                className="pretty_container six columns",
             ),
             html.Div(
                 [dcc.Graph(id="si_pie_graph")],
-                className="pretty_container five columns",
+                className="pretty_container six columns",
             ),
         ],
         className="row flex-display",
-    ),      
+    ),     
+    
+
+]),
 
 
+
+
+# =============================================================================
+# START CONTAINER COMPARE
+# =============================================================================
+
+html.Div(
+    id="compare-container", 
+    children = [    
+
+
+
+# =============================================================================
+# Filters COMPARE           
+# =============================================================================
+
+html.Div([
+    html.Div([
+        
+       #Filter Year 
+       html.P("Year",className="control_label"),
+       html.Div(id='output_year_left',className="filter-label"),
+       dcc.RangeSlider(
+           id='year_slider_left',
+           min=1979,
+           max=2017,
+           value=[1990, 2002],
+           marks={
+               1980: {'label': '1980'},
+               1985: {'label': '1985'},
+               1990: {'label': '1990'},
+               1995: {'label': '1995'},
+               2000: {'label': '2000'},
+               2005: {'label': '2005'},
+               2010: {'label': '2010'},
+               2015: {'label': '2015'}
+           },
+           included=True
+       )  ,
+       
+       #Filter Year 
+       html.P("Month",className="control_label"),
+       html.Div(id='output_month_left',className="filter-label"),
+       dcc.RangeSlider(
+           id='month_slider_left',
+           min=1,
+           max=12,
+           value=[1, 12],
+           marks={
+               1: {'label': '1'},
+               2: {'label': '2'},
+               3: {'label': '3'},
+               4: {'label': '4'},
+               5: {'label': '5'},
+               6: {'label': '6'},
+               7: {'label': '7'},
+               8: {'label': '8'},
+               9: {'label': '9'},
+               10: {'label': '10'},
+               11: {'label': '11'},
+               12: {'label': '12'}
+           },
+           included=True
+       ),
+       
+       #Filter Severity
+       html.P("Severity",className="control_label"),
+       html.Div(id='output_si_left',className="filter-label"),
+       dcc.RangeSlider(
+           id='si_slider_left',
+           min=0,
+           max=250,
+           value=[30, 250],
+           marks={
+               0: {'label': '0'},
+               50: {'label': '0.5'},
+               100: {'label': '1'},
+               150: {'label': '1.5'},
+               200: {'label': '2'},
+               250: {'label': '2.5'}
+           },
+           included=True
+       ),
+       
+       #Filter Area
+       html.P("Area",className="control_label"),
+       html.Div(id='output_area_left',className="filter-label"),
+       dcc.RangeSlider(
+           id='area_slider_left',
+           min=0,
+           max=200,
+           value=[0, 200], #max 17.45 -> 200
+           marks={
+               0: {'label': '0'},
+               50: {'label': '50'},
+               100: {'label': '100'},
+               150: {'label': '150'},   
+               200: {'label': '200'}
+                            
+           },
+           included=True
+       ),
+          
+       #Filter Hours
+       html.P("Hour",className="control_label"),
+       html.Div(id='output_hours_left',className="filter-label"),
+       dcc.RangeSlider(
+           id='hours_slider_left',
+           min=1,
+           max=100,
+           value=[1, 100], 
+           marks={
+               1: {'label': '0'},
+               5: {'label': '5'},
+               10: {'label': '10'},
+               24: {'label': '24'},
+               100: {'label': '100'},                        
+           },
+           included=True
+       ),
+      
+       #Select color-map-feature radio button
+       html.P("Select variable as color:",className="control_label"),
+       dcc.RadioItems(
+           className="control_label",
+           id='map_size_radio_items_left',
+           options=[
+               {'label': 'Year', 'value': 'event_year'},
+               {'label': 'Severity', 'value': 'event_si'}
+           ],
+           value='event_year',
+           labelStyle={'display': 'inline-block'}
+       ),html.Div(id='output_size_button_left'),
+
+       #Select country
+       html.P("Country",className="control_label"),                          
+        dcc.Dropdown(
+            id="country_selector_left",
+            options=countries_options,
+            multi=True,
+            value=country_list,
+            className="dcc_control",
+        ),
+           
+       ],             
+    className="pretty_container six columns",
+
+),
+    
+    
+    
+html.Div([    
+    html.Div([
+       #Filter Year 
+       html.P("Year",className="control_label"),
+       html.Div(id='output_year_right',className="filter-label"),
+       dcc.RangeSlider(
+           id='year_slider_right',
+           min=1979,
+           max=2017,
+           value=[1990, 2002],
+           marks={
+               1980: {'label': '1980'},
+               1985: {'label': '1985'},
+               1990: {'label': '1990'},
+               1995: {'label': '1995'},
+               2000: {'label': '2000'},
+               2005: {'label': '2005'},
+               2010: {'label': '2010'},
+               2015: {'label': '2015'}
+           },
+           included=True
+       )  ,
+       
+       #Filter Year 
+       html.P("Month",className="control_label"),
+       html.Div(id='output_month_right',className="filter-label"),
+       dcc.RangeSlider(
+           id='month_slider_right',
+           min=1,
+           max=12,
+           value=[1, 12],
+           marks={
+               1: {'label': '1'},
+               2: {'label': '2'},
+               3: {'label': '3'},
+               4: {'label': '4'},
+               5: {'label': '5'},
+               6: {'label': '6'},
+               7: {'label': '7'},
+               8: {'label': '8'},
+               9: {'label': '9'},
+               10: {'label': '10'},
+               11: {'label': '11'},
+               12: {'label': '12'}
+           },
+           included=True
+       ),
+       
+       #Filter Severity
+       html.P("Severity",className="control_label"),
+       html.Div(id='output_si_right',className="filter-label"),
+       dcc.RangeSlider(
+           id='si_slider_right',
+           min=0,
+           max=250,
+           value=[30, 250],
+           marks={
+               0: {'label': '0'},
+               50: {'label': '0.5'},
+               100: {'label': '1'},
+               150: {'label': '1.5'},
+               200: {'label': '2'},
+               250: {'label': '2.5'}
+           },
+           included=True
+       ),
+       
+       #Filter Area
+       html.P("Area",className="control_label"),
+       html.Div(id='output_area_right',className="filter-label"),
+       dcc.RangeSlider(
+           id='area_slider_right',
+           min=0,
+           max=200,
+           value=[0, 200], #max 17.45 -> 200
+           marks={
+               0: {'label': '0'},
+               50: {'label': '50'},
+               100: {'label': '100'},
+               150: {'label': '150'},   
+               200: {'label': '200'}
+                            
+           },
+           included=True
+       ),
+          
+       #Filter Hours
+       html.P("Hour",className="control_label"),
+       html.Div(id='output_hours_right',className="filter-label"),
+       dcc.RangeSlider(
+           id='hours_slider_right',
+           min=1,
+           max=100,
+           value=[1, 100], 
+           marks={
+               1: {'label': '0'},
+               5: {'label': '5'},
+               10: {'label': '10'},
+               24: {'label': '24'},
+               100: {'label': '100'},                        
+           },
+           included=True
+       ),
+      
+       #Select color-map-feature radio button
+       html.P("Select variable as color:",className="control_label"),
+       dcc.RadioItems(
+           className="control_label",
+           id='map_size_radio_items_right',
+           options=[
+               {'label': 'Year', 'value': 'event_year'},
+               {'label': 'Severity', 'value': 'event_si'}
+           ],
+           value='event_year',
+           labelStyle={'display': 'inline-block'}
+       ),html.Div(id='output_size_button_right'),
+
+       #Select country
+       html.P("Country",className="control_label"),                          
+        dcc.Dropdown(
+            id="country_selector_right",
+            options=countries_options,
+            multi=True,
+            value=country_list,
+            className="dcc_control",
+        ),
         
         
-        
+       ],       
+          )],          
+    className="pretty_container six columns",
+
+    
+   
+    )],
+ className="row flex-display",
+ ), #END DIV ROW 1
+    
+    
+    
+# =============================================================================
+# PLOTS COMPARE    
+# =============================================================================
+#DIV ROW 2  
+html.Div(
+    [
+        html.Div(
+            [dcc.Graph(id="si_pie_graph_2")],
+              className="pretty_container six columns",
+        ),
+        html.Div(
+                [dcc.Graph(id="count_year_graph_2")],
+                  className="pretty_container six columns",
+            ),
+
+    ],
+    className="row flex-display",
+),
+    
+
+
+    
+    
+#END CONTAINER COMPARE
+]),
+
+    
 #Close Header        
     ],
     id="mainContainer",
@@ -376,6 +748,27 @@ def update_filter_hours(hours_slider):
 #     [Input("map_size_radio_items", "value")])
 # def update_filter_buttons(map_size_radio_items):
 #     return str(map_size_radio_items)
+
+
+
+
+
+
+
+@app.callback(Output('single-container', 'style'), [Input('my-input', 'value')])
+def hide_single(my_input):
+    if my_input:
+        return {'display':'none'}
+    return {'display':'block'}
+
+@app.callback(Output('compare-container', 'style'), [Input('my-input', 'value')])
+def show_compare(my_input):
+    if my_input:
+        return {'display':'block'}
+    return {'display':'none'}
+
+
+
 
 
 @app.callback(
@@ -559,25 +952,12 @@ def plot_count_month(year_range, month_range, si_range, area_range, map_size_rad
 
 
 
-# Selectors, main graph -> pie graph
-@app.callback(
-    Output(component_id='si_pie_graph', component_property='figure'),
-    [Input("year_slider", "value"),
-     Input("month_slider", "value"),
-     Input("si_slider", "value"),
-     Input("area_slider", "value"),
-     Input("map_size_radio_items", "value"),
-     Input("hours_slider", "value"),
-     Input("country_selector", "value")])
-def plot_count_month(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list): 
-
+def plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
     layout_pie = copy.deepcopy(layout)
     si_range = [0,300]
     tmp = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
     tmp = tmp.drop_duplicates(subset='event_id', keep='first')
     tmp = tmp.groupby('label_si').event_id.count().reset_index()
-
-
 
     data = [
         dict(
@@ -619,6 +999,47 @@ def plot_count_month(year_range, month_range, si_range, area_range, map_size_rad
     figure = dict(data=data, layout=layout_pie)
     return figure
 
+
+@app.callback(
+    Output(component_id='si_pie_graph', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_pie_graph(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list): 
+    figure = plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    return figure
+
+    
+@app.callback(
+    Output(component_id='si_pie_graph_2', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_pie_graph(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list): 
+    figure = plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    return figure
+
+@app.callback(
+    Output(component_id='count_year_graph_2', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_pie_graph(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list): 
+    figure = plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    return figure
+
     
     
     
@@ -627,4 +1048,4 @@ def plot_count_month(year_range, month_range, si_range, area_range, map_size_rad
 # =============================================================================
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=False)

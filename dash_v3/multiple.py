@@ -13,13 +13,13 @@ Created on Mon Dec 14 15:03:35 2020
 #!pip install numpy
 #!pip install matplotlib
 
+import os
+os.environ['OPENBLAS_NUM_THREADS'] = '1'
 import numpy as np
 import pandas as pd
 import copy
 import matplotlib.pyplot as plt
-
 import plotly.express as px
-
 import dash
 from dash.dependencies import Input, Output, State, ClientsideFunction
 import dash_core_components as dcc
