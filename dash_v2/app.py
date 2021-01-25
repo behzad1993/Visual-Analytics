@@ -1048,4 +1048,4 @@ def plot_pie_graph(year_range, month_range, si_range, area_range, map_size_radio
 # =============================================================================
 
 if __name__ == "__main__":
-    app.run_server(debug=False)
+    app.run_server(debug=False, host='0.0.0.0', port=8050)
