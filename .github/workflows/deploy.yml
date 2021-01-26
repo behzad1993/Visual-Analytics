@@ -1,0 +1,9 @@
+on: push
+jobs:
+  curl:
+    runs-on: ubuntu-latest
+    steps:
+    - name: curl
+      uses: wei/curl@v1
+      with:
+        args: "-X POST https://docker.framework.uz/api/endpoints/1/docker/containers/7b1ff81f8378084c6c1026fc9c7e581e4ffc0d08c10902e0924e71d3c7a430ef/restart -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGUiOjEsImV4cCI6MTYxMTY4MDU5Mn0.mcxEEOigTla6iH-TGPgN2s7Rl1G3Dw9T941RARCy4iI'"
