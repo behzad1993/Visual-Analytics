@@ -25,6 +25,7 @@ import dash
 from dash.dependencies import Input, Output, State, ClientsideFunction
 import dash_core_components as dcc
 import dash_html_components as html
+import data_builder
 import dash_daq as daq
 
 # =============================================================================
@@ -343,6 +344,51 @@ html.Div([
     ),     
     
 
+# DIV ROW 4
+    html.Div(
+        [
+            html.Div(
+                [dcc.Graph(id="duration_in_hours_graph")],
+                className="pretty_container six columns",
+            ),
+            html.Div(
+                [dcc.Graph(id="severity_per_year_graph")],
+                className="pretty_container six columns",
+            ),
+        ],
+        className="row flex-display",
+    ),
+
+        # DIV ROW 5
+        html.Div(
+            [
+                html.Div(
+                    [dcc.Graph(id="area_per_year_graph")],
+                    className="pretty_container six columns",
+                ),
+                html.Div(
+                    [dcc.Graph(id="precipitation_per_month_graph")],
+                    className="pretty_container six columns",
+                ),
+
+            ],
+            className="row flex-display",
+        ),
+
+# DIV ROW 6
+    html.Div(
+        [
+            html.Div(
+                [dcc.Graph(id="events_per_month_graph")],
+                className="pretty_container six columns",
+            ),
+            html.Div(
+                [dcc.Graph(id="events_per_year_graph")],
+                className="pretty_container six columns",
+            ),
+        ],
+        className="row flex-display",
+    ),
 ]),
 
 
@@ -1040,9 +1086,89 @@ def plot_pie_graph(year_range, month_range, si_range, area_range, map_size_radio
     figure = plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
     return figure
 
-    
-    
-    
+
+@app.callback(
+    Output(component_id='duration_in_hours_graph', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_duration(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    figure = data_builder.get_duration_in_hours(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    return figure
+
+@app.callback(
+    Output(component_id='severity_per_year_graph', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_severity(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    figure = data_builder.get_severity_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    return figure
+
+
+@app.callback(
+    Output(component_id='area_per_year_graph', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_severity(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    figure = data_builder.get_area_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    return figure
+
+
+@app.callback(
+    Output(component_id='precipitation_per_month_graph', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    figure = data_builder.get_precipitation_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    return figure
+
+
+@app.callback(
+    Output(component_id='events_per_year_graph', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    figure = data_builder.get_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    return figure
+
+
+@app.callback(
+    Output(component_id='events_per_month_graph', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    figure = data_builder.get_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    return figure
+
 # =============================================================================
 # Main
 # =============================================================================
