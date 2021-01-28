@@ -328,6 +328,17 @@ app.layout = html.Div([
                 [
                     html.Div(
                         [dcc.Graph(id="duration_in_hours_graph")],
+                        className="twelve columns twelve row",
+                    ),
+                ],
+                className="row flex-display",
+            ),
+
+            # DIV ROW 5
+            html.Div(
+                [
+                    html.Div(
+                        [dcc.Graph(id="sev_linear")],
                         className="pretty_container six columns",
                     ),
                     html.Div(
@@ -338,7 +349,7 @@ app.layout = html.Div([
                 className="row flex-display",
             ),
 
-            # DIV ROW 5
+            # DIV ROW 6
             html.Div(
                 [
                     html.Div(
@@ -354,7 +365,7 @@ app.layout = html.Div([
                 className="row flex-display",
             ),
 
-            # DIV ROW 6
+            # DIV ROW 7
             html.Div(
                 [
                     html.Div(
@@ -1052,8 +1063,8 @@ def plot_pie_graph(year_range, month_range, si_range, area_range, map_size_radio
      Input("hours_slider", "value"),
      Input("country_selector", "value")])
 def plot_duration(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
-    return data_builder.get_duration_in_hours_per_year(year_range, month_range, si_range, area_range,
-                                                       map_size_radio_items, hours_range, country_list)
+    return data_builder.get_duration_per_year(year_range, month_range, si_range, area_range,
+                                              map_size_radio_items, hours_range, country_list)
 
 
 @app.callback(
@@ -1080,7 +1091,7 @@ def plot_severity(year_range, month_range, si_range, area_range, map_size_radio_
      Input("map_size_radio_items", "value"),
      Input("hours_slider", "value"),
      Input("country_selector", "value")])
-def plot_severity(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+def plot_area(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
     figure = data_builder.get_area_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
                                             hours_range, country_list)
     return figure
@@ -1134,9 +1145,25 @@ def plot_events_per_month(year_range, month_range, si_range, area_range, map_siz
     return figure
 
 
+@app.callback(
+    Output(component_id='sev_linear', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
+                          country_list):
+    figure = data_builder.get_se_linear(year_range, month_range, si_range, area_range, map_size_radio_items,
+                                               hours_range, country_list)
+    return figure
+
 # =============================================================================
 # Main
 # =============================================================================
+
 
 if __name__ == "__main__":
     app.run_server(debug=False, host='0.0.0.0', port=8050)
