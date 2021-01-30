@@ -328,31 +328,40 @@ app.layout = html.Div([
                 [
                     html.Div(
                         [dcc.Graph(id="sev_linear")],
-                        className="twelve columns twelve row",
+                        className="twelve columns",
+                        style={'backgroundColor':'white'}
                     )
                 ],
-                className="row flex-display",
+                className="pretty_container row flex-display",
+                style={'backgroundColor':'white'}
             ),
             
             # DIV ROW 5
             html.Div(
                 [
-                    dcc.Dropdown(
-                        id='input_multi_graph_overTime',
-                        options=[
-                            {'label': 'Duration over time', 'value': 'event_length'},
-                            {'label': 'Severity over time', 'value': 'event_si'}, 
-                            {'label': 'Area over time', 'value': 'event_area'}, 
-                            {'label': 'Precipitation over time', 'value': 'event_pre'}
+                    html.Div(
+                        [
+                            dcc.Dropdown(
+                                id='input_multi_graph_overTime',
+                                options=[
+                                    {'label': 'Duration over time', 'value': 'event_length'},
+                                    {'label': 'Severity over time', 'value': 'event_si'}, 
+                                    {'label': 'Area over time', 'value': 'event_area'}, 
+                                    {'label': 'Precipitation over time', 'value': 'event_pre'}
+                                ],
+                                value='event_length'
+                            )
                         ],
-                        value='event_length'
                     ),
+
                     html.Div(
                         [dcc.Graph(id="multi_graph")],
-                        className="twelve columns twelve row",
+                        className="twelve columns",
+                        style={'backgroundColor':'white'}
                     ),
                 ],
-                className="row flex-display",
+                className="pretty_container row",
+                style={'backgroundColor':'white'}
             ),
             
             # DIV ROW 6
@@ -368,10 +377,12 @@ app.layout = html.Div([
                     ),
                     html.Div(
                         [dcc.Graph(id="output_multi_graph_events")],
-                        className="twelve columns twelve row",
+                        className="twelve columns",
+                        style={'backgroundColor':'white'}
                     ),
                 ],
-                className="row flex-display",
+                className="pretty_container row",
+                style={'backgroundColor':'white'}
             ),
 
         ]),
