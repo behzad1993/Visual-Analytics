@@ -282,14 +282,15 @@ app.layout = html.Div([
                 # =============================================================================
                 html.Div([
                     html.Div(
-                        [dcc.Graph(id="map")],
+                        [dcc.Graph(id="count_year_graph")],
                         className="pretty_container",
                         # id="map",
                         # className="pretty_container",
                     )],
-                    id="right-column",
                     className="eight columns",
-                )],
+                )
+                
+                ],
                 className="row flex-display",
             ),  # END DIV ROW 1
 
@@ -297,7 +298,7 @@ app.layout = html.Div([
             html.Div(
                 [
                     html.Div(
-                        [dcc.Graph(id="count_year_graph")],
+                        [dcc.Graph(id="map")],
                         className="pretty_container six columns",
                     ),
                     html.Div(
