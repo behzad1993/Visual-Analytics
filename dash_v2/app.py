@@ -322,63 +322,58 @@ app.layout = html.Div([
                 ],
                 className="row flex-display",
             ),
-
+            
             # DIV ROW 4
             html.Div(
                 [
                     html.Div(
-                        [dcc.Graph(id="duration_in_hours_graph")],
+                        [dcc.Graph(id="sev_linear")],
+                        className="twelve columns twelve row",
+                    )
+                ],
+                className="row flex-display",
+            ),
+            
+            # DIV ROW 5
+            html.Div(
+                [
+                    dcc.Dropdown(
+                        id='input_multi_graph_overTime',
+                        options=[
+                            {'label': 'Duration over time', 'value': 'event_length'},
+                            {'label': 'Severity over time', 'value': 'event_si'}, 
+                            {'label': 'Area over time', 'value': 'event_area'}, 
+                            {'label': 'Precipitation over time', 'value': 'event_pre'}
+                        ],
+                        value='event_length'
+                    ),
+                    html.Div(
+                        [dcc.Graph(id="multi_graph")],
+                        className="twelve columns twelve row",
+                    ),
+                ],
+                className="row flex-display",
+            ),
+            
+            # DIV ROW 6
+            html.Div(
+                [
+                    dcc.Dropdown(
+                        id='input_multi_graph_events',
+                        options=[
+                            {'label': 'Events average per Month', 'value': 'events_per_month'},
+                            {'label': 'Events average per Year', 'value': 'events_per_year'}
+                        ],
+                        value='events_per_month'
+                    ),
+                    html.Div(
+                        [dcc.Graph(id="output_multi_graph_events")],
                         className="twelve columns twelve row",
                     ),
                 ],
                 className="row flex-display",
             ),
 
-            # DIV ROW 5
-            html.Div(
-                [
-                    html.Div(
-                        [dcc.Graph(id="sev_linear")],
-                        className="pretty_container six columns",
-                    ),
-                    html.Div(
-                        [dcc.Graph(id="severity_per_year_graph")],
-                        className="pretty_container six columns",
-                    ),
-                ],
-                className="row flex-display",
-            ),
-
-            # DIV ROW 6
-            html.Div(
-                [
-                    html.Div(
-                        [dcc.Graph(id="area_per_year_graph")],
-                        className="pretty_container six columns",
-                    ),
-                    html.Div(
-                        [dcc.Graph(id="precipitation_per_month_graph")],
-                        className="pretty_container six columns",
-                    ),
-
-                ],
-                className="row flex-display",
-            ),
-
-            # DIV ROW 7
-            html.Div(
-                [
-                    html.Div(
-                        [dcc.Graph(id="events_per_month_graph")],
-                        className="pretty_container six columns",
-                    ),
-                    html.Div(
-                        [dcc.Graph(id="events_per_year_graph")],
-                        className="pretty_container six columns",
-                    ),
-                ],
-                className="row flex-display",
-            ),
         ]),
 
     # =============================================================================
@@ -1054,95 +1049,58 @@ def plot_pie_graph(year_range, month_range, si_range, area_range, map_size_radio
 
 
 @app.callback(
-    Output(component_id='duration_in_hours_graph', component_property='figure'),
-    [Input("year_slider", "value"),
+    Output(component_id='multi_graph', component_property='figure'),
+    [Input("input_multi_graph_overTime", "value"),
+     Input("year_slider", "value"),
      Input("month_slider", "value"),
      Input("si_slider", "value"),
      Input("area_slider", "value"),
      Input("map_size_radio_items", "value"),
      Input("hours_slider", "value"),
      Input("country_selector", "value")])
-def plot_duration(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
-    return data_builder.get_duration_per_year(year_range, month_range, si_range, area_range,
+def plot_duration(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    
+    if(current_figure == "event_length"):
+        return data_builder.get_duration_per_year(year_range, month_range, si_range, area_range,
                                               map_size_radio_items, hours_range, country_list)
-
-
-@app.callback(
-    Output(component_id='severity_per_year_graph', component_property='figure'),
-    [Input("year_slider", "value"),
-     Input("month_slider", "value"),
-     Input("si_slider", "value"),
-     Input("area_slider", "value"),
-     Input("map_size_radio_items", "value"),
-     Input("hours_slider", "value"),
-     Input("country_selector", "value")])
-def plot_severity(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
-    figure = data_builder.get_severity_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
+    
+    if(current_figure == "event_si"):
+        return data_builder.get_severity_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
                                                 hours_range, country_list)
-    return figure
-
+                                                
+    if(current_figure == "event_area"):
+        return data_builder.get_area_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
+                                                hours_range, country_list)
+                                                
+    if(current_figure == "event_pre"):
+        return data_builder.get_precipitation_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
+                                                hours_range, country_list)
+    
+    return None
 
 @app.callback(
-    Output(component_id='area_per_year_graph', component_property='figure'),
-    [Input("year_slider", "value"),
+    Output(component_id='output_multi_graph_events', component_property='figure'),
+    [Input("input_multi_graph_events", "value"),
+     Input("year_slider", "value"),
      Input("month_slider", "value"),
      Input("si_slider", "value"),
      Input("area_slider", "value"),
      Input("map_size_radio_items", "value"),
      Input("hours_slider", "value"),
      Input("country_selector", "value")])
-def plot_area(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
-    figure = data_builder.get_area_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
-                                            hours_range, country_list)
-    return figure
-
-
-@app.callback(
-    Output(component_id='precipitation_per_month_graph', component_property='figure'),
-    [Input("year_slider", "value"),
-     Input("month_slider", "value"),
-     Input("si_slider", "value"),
-     Input("area_slider", "value"),
-     Input("map_size_radio_items", "value"),
-     Input("hours_slider", "value"),
-     Input("country_selector", "value")])
-def plot_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
+def plot_events_per_year_or_month(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                           country_list):
-    figure = data_builder.get_precipitation_per_year(year_range, month_range, si_range, area_range,
-                                                     map_size_radio_items, hours_range, country_list)
-    return figure
-
-
-@app.callback(
-    Output(component_id='events_per_year_graph', component_property='figure'),
-    [Input("year_slider", "value"),
-     Input("month_slider", "value"),
-     Input("si_slider", "value"),
-     Input("area_slider", "value"),
-     Input("map_size_radio_items", "value"),
-     Input("hours_slider", "value"),
-     Input("country_selector", "value")])
-def plot_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
-                         country_list):
-    figure = data_builder.get_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
-                                              hours_range, country_list)
-    return figure
-
-
-@app.callback(
-    Output(component_id='events_per_month_graph', component_property='figure'),
-    [Input("year_slider", "value"),
-     Input("month_slider", "value"),
-     Input("si_slider", "value"),
-     Input("area_slider", "value"),
-     Input("map_size_radio_items", "value"),
-     Input("hours_slider", "value"),
-     Input("country_selector", "value")])
-def plot_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
-                          country_list):
-    figure = data_builder.get_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items,
+    
+    if(current_figure == "events_per_month"):
+        return data_builder.get_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items,
                                                hours_range, country_list)
-    return figure
+    
+    if(current_figure == "events_per_year"):
+        return data_builder.get_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
+                                                hours_range, country_list)
+
+    return None
+
 
 
 @app.callback(
