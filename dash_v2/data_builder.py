@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import plotly.express as px
 
 df: pd.DataFrame
 cluster_range = 5
@@ -62,7 +63,10 @@ def get_events_per_year(year_range, month_range, si_range, area_range, map_size_
 
     events_per_year = events_filtered.groupby('event_year')['event_id'].nunique().reset_index()
     events_mean = events_per_year.event_id.mean()
-
+    ##
+    events_per_year_country = events_filtered.groupby(['event_year','country'])['event_id'].nunique().reset_index()
+    events_per_year_country.country[~events_per_year_country.country.isin(['DE','CZ','IT','INT','TN'])] = 'other'
+    ##
     events_per_cluster = events_filtered.groupby('year_cluster')['event_id'].count()
     events_per_cluster = pd.DataFrame(events_per_cluster)
     events_per_cluster['avg_per_cluster'] = events_per_cluster.event_id / cluster_range
@@ -72,21 +76,25 @@ def get_events_per_year(year_range, month_range, si_range, area_range, map_size_
     df_avg.index = df_avg.index + year_min
     df_avg['avg'] = events_mean
 
-    plot1 = Plot(events_per_year.event_year, events_per_year.event_id, 'Per year')
+    plot1 = Plot(events_per_year_country.event_year, events_per_year_country.event_id, 'Per year',events_per_year_country.country)
     plot2 = Plot(df_avg.index, df_avg.avg, 'Overall average')
     plot3 = Plot(events_per_cluster.year_cluster, events_per_cluster.avg_per_cluster, 'avg per cluster')
 
     return plot_property_per_time_scale(plot1, plot2, plot3, 'Month', 'Events', 'Events average per Year', 'linear')
+    #return plot_property_per_time_scale_stacked(events_per_year_country, df_avg, events_per_cluster, 'Month', 'Events', 'Events average per Year', 'linear')
 
 
 def get_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                          country_list):
     events_filtered = filter_events(year_range, month_range, si_range, area_range, hours_range, country_list)
-
+    ##
+    events_per_month_country = events_filtered.groupby(['event_month','country'])['event_id'].nunique().reset_index()
+    events_per_month_country.country[~events_per_month_country.country.isin(['DE','CZ','IT','INT','TN'])] = 'other'
+    ##
     events_per_month = events_filtered.groupby('event_month')['event_id'].nunique().reset_index()
     avg = events_per_month.event_id.mean()
 
-    plot1 = Plot(events_per_month.event_month, events_per_month.event_id, 'Per month')
+    plot1 = Plot(events_per_month_country.event_month, events_per_month_country.event_id,'Per month',events_per_month_country.country)
 
     df_avg = pd.DataFrame(index=np.arange(13), columns=['avg'])
     df_avg = df_avg.drop(df_avg.index[0])
@@ -96,7 +104,6 @@ def get_events_per_month(year_range, month_range, si_range, area_range, map_size
     plot3 = None
 
     return plot_property_per_time_scale(plot1, plot2, plot3, 'Month', 'Events', 'Events average per Month', 'linear')
-
 
 def init_data():
     global df
@@ -193,8 +200,11 @@ def get_cluster(filtered_df, event_property):
 
 
 def plot_property_per_time_scale(plot1, plot2, plot3, x_title, y_title, table_title, scale):
-    figure = make_subplots(specs=[[{"secondary_y": True}]])
-    figure.add_bar(x=plot1.x, y=plot1.y, name=plot1.name)
+    if plot1.stacked is None:
+        figure = make_subplots(specs=[[{"secondary_y": True}]])
+        figure.add_bar(x=plot1.x, y=plot1.y, name=plot1.name)
+    else:
+        figure = px.bar(x=plot1.x, y=plot1.y, title=plot1.name, color=plot1.stacked)
     figure.add_trace(go.Scatter(x=plot2.x, y=plot2.y, name=plot2.name, mode='lines'))
 
     if plot3 is not None:
@@ -204,7 +214,6 @@ def plot_property_per_time_scale(plot1, plot2, plot3, x_title, y_title, table_ti
     figure.update_yaxes(title_text=y_title)
     get_layout(figure, table_title, scale)
     return figure
-
 
 def get_layout(figure, title, scale):
     figure.update_layout(
@@ -262,7 +271,9 @@ init_data()
 
 
 class Plot:
-    def __init__(self, x, y, name):
+    def __init__(self, x, y, name, stacked = None):
         self.x = x
         self.y = y
         self.name = name
+        self.stacked = stacked
+        
