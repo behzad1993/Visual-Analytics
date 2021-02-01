@@ -12,6 +12,7 @@ Created on Mon Dec 14 15:03:35 2020
 # !pip install numpy
 # !pip install matplotlib
 # !pip install dash_daq
+#!pip install bubbly
 
 import os
 
@@ -25,6 +26,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 import data_builder
 import dash_daq as daq
+from bubbly.bubbly import bubbleplot
+from plotly.offline import iplot   
 
 # =============================================================================
 # Settinga & Data
@@ -324,17 +327,48 @@ app.layout = html.Div([
                 className="row flex-display",
             ),
             
+            
+            
+            # DIV ROW 4
+            
+            html.Div(
+                [
+                    html.Div(
+                        [dcc.Graph(id="animated_bubble_chart")],
+                        className="pretty_container six columns",
+                    ),
+                    html.Div(
+                        [dcc.Graph(id="animated_bubble_chart_2")],
+                        className="pretty_container six columns",
+                    ),
+                ],
+                className="row flex-display",
+            ),
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             # DIV ROW 4
             html.Div(
                 [
                     html.Div(
                         [dcc.Graph(id="sev_linear")],
-                        className="twelve columns",
-                        style={'backgroundColor':'white'}
+                        className="pretty_container twelve columns",
                     )
                 ],
-                className="pretty_container row flex-display",
-                style={'backgroundColor':'white'}
+                className="row flex-display",
             ),
             
             # DIV ROW 5
@@ -1032,6 +1066,10 @@ def plot_pie_graph(year_range, month_range, si_range, area_range, map_size_radio
     return figure
 
 
+# =============================================================================
+# Plots Compare 
+# =============================================================================
+
 @app.callback(
     Output(component_id='si_pie_graph_2', component_property='figure'),
     [Input("year_slider", "value"),
@@ -1130,10 +1168,75 @@ def plot_events_per_month(year_range, month_range, si_range, area_range, map_siz
                                                hours_range, country_list)
     return figure
 
+
+
+@app.callback(
+    Output(component_id='animated_bubble_chart', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def animated_bubble_chart(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    
+
+    tmp = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+ 
+    tmp = tmp[['event_id', 'event_year', 'country', 'meanPre', 'size', 'area']].groupby(['event_id', 'event_year', 'country']).sum(['meanPre', 'size', 'area']).reset_index()
+    tmp['event_year'] = pd.to_datetime(tmp['event_year'], format='%Y')
+    
+    tmp3 = pd.DataFrame()
+
+    
+    
+    for country in list(tmp.country.unique()):
+        tmp2 = tmp[tmp['country'] == country]
+        tmp2 = tmp2.append({'event_year':tmp['event_year'].min(), 'meanPre':0, 'size':0, 'area':0}, ignore_index=True)
+        tmp2 = tmp2.append({'event_year':tmp['event_year'].max(), 'meanPre':0, 'size':0, 'area':0}, ignore_index=True)
+        tmp2 = tmp2.groupby(pd.Grouper(key='event_year', freq='Y')).sum(['size']).reset_index()
+        tmp2 = tmp2.fillna(0)
+        tmp2['country'] = country
+        tmp3 = tmp3.append(tmp2)
+        #print(country)
+        
+    tmp = tmp3.reset_index(drop=True)
+    tmp['event_year'] = tmp['event_year'].dt.year
+    tmp['Country_Name'] = 'Other'
+    tmp.loc[tmp['country'] == 'IT', 'Country_Name'] = 'Italy'
+    tmp.loc[tmp['country'] == 'DE', 'Country_Name'] = 'Germany'
+    tmp.loc[tmp['country'] == 'PL', 'Country_Name'] = 'Poland'
+    tmp.loc[tmp['country'] == 'CZ', 'Country_Name'] = 'Czech Republic'
+    tmp.loc[tmp['country'] == 'TN', 'Country_Name'] = 'Tunesia'
+    tmp = tmp[tmp['country'] != 'INT']
+    
+    figure = bubbleplot(dataset=tmp, x_column='area', y_column='meanPre', 
+        bubble_column='country', time_column='event_year', size_column='size', color_column='Country_Name', 
+        x_title="Total Area", y_title="Total Precipitation", title='Heavy Rain Events in selected Countries')
+    
+
+    return figure
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # =============================================================================
 # Main
 # =============================================================================
 
 
 if __name__ == "__main__":
-    app.run_server(debug=False, host='0.0.0.0', port=8050)
+    app.run_server(debug=False)
