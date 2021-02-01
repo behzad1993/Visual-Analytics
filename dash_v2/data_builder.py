@@ -63,10 +63,10 @@ def get_events_per_year(year_range, month_range, si_range, area_range, map_size_
 
     events_per_year = events_filtered.groupby('event_year')['event_id'].nunique().reset_index()
     events_mean = events_per_year.event_id.mean()
-    ##
+    
     events_per_year_country = events_filtered.groupby(['event_year','country'])['event_id'].nunique().reset_index()
     events_per_year_country.country[~events_per_year_country.country.isin(['DE','CZ','IT','INT','TN'])] = 'other'
-    ##
+    
     events_per_cluster = events_filtered.groupby('year_cluster')['event_id'].count()
     events_per_cluster = pd.DataFrame(events_per_cluster)
     events_per_cluster['avg_per_cluster'] = events_per_cluster.event_id / cluster_range
@@ -81,16 +81,15 @@ def get_events_per_year(year_range, month_range, si_range, area_range, map_size_
     plot3 = Plot(events_per_cluster.year_cluster, events_per_cluster.avg_per_cluster, 'avg per cluster')
 
     return plot_property_per_time_scale(plot1, plot2, plot3, 'Month', 'Events', 'Events average per Year', 'linear')
-    #return plot_property_per_time_scale_stacked(events_per_year_country, df_avg, events_per_cluster, 'Month', 'Events', 'Events average per Year', 'linear')
 
 
 def get_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                          country_list):
     events_filtered = filter_events(year_range, month_range, si_range, area_range, hours_range, country_list)
-    ##
+    
     events_per_month_country = events_filtered.groupby(['event_month','country'])['event_id'].nunique().reset_index()
     events_per_month_country.country[~events_per_month_country.country.isin(['DE','CZ','IT','INT','TN'])] = 'other'
-    ##
+    
     events_per_month = events_filtered.groupby('event_month')['event_id'].nunique().reset_index()
     avg = events_per_month.event_id.mean()
 
