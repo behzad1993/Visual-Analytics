@@ -266,6 +266,20 @@ app.layout = html.Div([
                         value='event_year',
                         labelStyle={'display': 'inline-block'}
                     ), html.Div(id='output_size_button'),
+                    
+                    # Select time intervals 
+                    html.P("Select time interval:", className="control_label"),
+                    dcc.RadioItems(
+                        className="control_label",
+                        id='interval_radio_items',
+                        options=[
+                            {'label': '1 year', 'value': '1'},
+                            {'label': '5 years', 'value': '5'},
+                            {'label': '10 years', 'value': '10'}
+                        ],
+                        value='interval',
+                        labelStyle={'display': 'inline-block'}
+                    ), html.Div(id='output_interval_button'),
 
                     # Select country
                     html.P("Country", className="control_label"),
