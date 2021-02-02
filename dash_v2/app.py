@@ -151,8 +151,8 @@ app.layout = html.Div([
             html.Div([
                 html.Div([
                     # Filter Year
-                    html.P("Year", className="control_label"),
-                    html.Div(id='output_year', className="filter-label"),
+                    html.Span("Year", className="control_label"),
+                    html.Span(id='output_year', className="filter-label"),
                     dcc.RangeSlider(
                         id='year_slider',
                         min=1979,
@@ -172,8 +172,8 @@ app.layout = html.Div([
                     ),
 
                     # Filter Year
-                    html.P("Month", className="control_label"),
-                    html.Div(id='output_month', className="filter-label"),
+                    html.Span("Month", className="control_label"),
+                    html.Span(id='output_month', className="filter-label"),
                     dcc.RangeSlider(
                         id='month_slider',
                         min=1,
@@ -197,8 +197,8 @@ app.layout = html.Div([
                     ),
 
                     # Filter Severity
-                    html.P("Severity", className="control_label"),
-                    html.Div(id='output_si', className="filter-label"),
+                    html.Span("Severity", className="control_label"),
+                    html.Span(id='output_si', className="filter-label"),
                     dcc.RangeSlider(
                         id='si_slider',
                         min=0,
@@ -216,8 +216,8 @@ app.layout = html.Div([
                     ),
 
                     # Filter Area
-                    html.P("Area", className="control_label"),
-                    html.Div(id='output_area', className="filter-label"),
+                    html.Span("Area", className="control_label"),
+                    html.Span(id='output_area', className="filter-label"),
                     dcc.RangeSlider(
                         id='area_slider',
                         min=0,
@@ -235,8 +235,8 @@ app.layout = html.Div([
                     ),
 
                     # Filter Hours
-                    html.P("Hour", className="control_label"),
-                    html.Div(id='output_hours', className="filter-label"),
+                    html.Span("Hour", className="control_label"),
+                    html.Span(id='output_hours', className="filter-label"),
                     dcc.RangeSlider(
                         id='hours_slider',
                         min=1,

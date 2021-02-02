@@ -32,3 +32,12 @@
     border-radius: 6px;
     background-color: #abe2fb;
 }
+.Select--multi .Select-value-label {
+    padding: 0.5px 0.5px;
+    display: unset;
+}
+.Select--multi .Select-value {
+  font-size: 10px;
+  margin-left: 2px;
+  margin-top: 1px;
+}
