@@ -1,5 +1,5 @@
 # Visual-Analytics
-Gummistiefel Projekt aus dem Kurs Visual Analytics
+Gummistiefel Projekt aus dem Kurs Visual Analytics. Please open the following directory: dash_v2
 
 # How to deploy
 1. Open: https://docker.framework.uz/
