@@ -31,3 +31,5 @@ Werkzeug==1.0.1
 
 requests~=2.25.1
 dash_daq==0.5.0
+
+bubbly==1.0.2
