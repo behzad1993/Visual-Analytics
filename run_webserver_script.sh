@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # open webserver directory
-cd dash_v2
+cd dash_final
 
 # install all dependencies
 pip install -r requirements.txt
