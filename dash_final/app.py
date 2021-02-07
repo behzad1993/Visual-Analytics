@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Dec 14 15:03:35 2020
-@author: David
-"""
 
 # https://plotly.github.io/plotly.py-docs/generated/plotly.express.scatter_mapbox.html
 # https://plotly.com/python/builtin-colorscales/
@@ -306,7 +302,7 @@ app.layout = html.Div([
                     ),
 
                 ],
-                    className="pretty_container twelve columns",
+                    className="pretty_container six columns",
                     id="cross-filter-options",
                     style={'backgroundColor': 'white'}
                 ),
@@ -458,10 +454,10 @@ app.layout = html.Div([
                     ),
 
                 ],
-                    className="pretty_container twelve columns",
+                    className="pretty_container six columns",
                     id="cross-filter-options_2",
-                    style={'backgroundColor': 'white'}
-                ),
+                    style={'backgroundColor': 'white', 'display': 'none'}
+                )
 
             ],
                 className="row flex-display",
@@ -476,87 +472,110 @@ app.layout = html.Div([
             
             # DIV ROW 1
             html.Div(
-                [
+                children=[
+                
                     html.Div(
                         [dcc.Graph(id="count_year_graph")],
-                        className="pretty_container twelve columns",
+                        className="pretty_container six columns",
                         id="count_year_graph_div_1",
                         style={'backgroundColor': 'white'}
+                        
                     ),
                     
                     html.Div(
                         [dcc.Graph(id="count_year_graph_2")],
-                        className="pretty_container twelve columns",
+                        className="pretty_container six columns",
                         id="count_year_graph_div_2",
-                        style={'backgroundColor': 'white'}
+                        style={'backgroundColor': 'white', 'display': 'none'}
                     )
+                    
                 ],
                 className="row flex-display",
             ),
             
             # DIV ROW 2
-            html.Div([
-                html.Div(
-                    [dcc.Graph(id="map")],
-                    className="pretty_container twelve columns",
-                ),
+            html.Div(
+                children=[
                 
-                html.Div(
-                    [dcc.Graph(id="map_2")],
-                    id="map_div_2",
-                    className="pretty_container twelve columns",
-                ),
+                    html.Div(
+                        [dcc.Graph(id="map")],
+                        id="map_div_1",
+                        className="pretty_container six columns",
+                        style={'backgroundColor': 'white'}
+                    ),
+                    
+                    html.Div(
+                        [dcc.Graph(id="map_2")],
+                        id="map_div_2",
+                        className="pretty_container six columns",
+                        style={'backgroundColor': 'white', 'display': 'none'}
+                    )
                 
                 ],
                 className="row flex-display",
             ),
             
             # DIV ROW 3
-            html.Div([
-                html.Div(
-                    [dcc.Graph(id="map_events_graph")],
-                    className="pretty_container twelve columns",
-                ),
+            html.Div(
+                children=[
                 
-                html.Div(
-                    [dcc.Graph(id="map_events_graph_2")],
-                    id="map_events_graph_div_2",
-                    className="pretty_container twelve columns",
-                ),
+                    html.Div(
+                        [dcc.Graph(id="map_events_graph")],
+                        id="map_events_graph_div_1",
+                        className="pretty_container six columns",
+                        style={'backgroundColor': 'white'}
+                    ),
+                    
+                    html.Div(
+                        [dcc.Graph(id="map_events_graph_2")],
+                        id="map_events_graph_div_2",
+                        className="pretty_container six columns",
+                        style={'backgroundColor': 'white', 'display': 'none'}
+                    )
                 
                 ],
                 className="row flex-display",
             ),
             
             # DIV ROW 4
-            html.Div([
-                html.Div(
-                    [dcc.Graph(id="si_pie_graph")],
-                    className="pretty_container twelve columns",
-                ),
+            html.Div(
+                children=[
                 
-                html.Div(
-                    [dcc.Graph(id="si_pie_graph_2")],
-                    id="si_pie_graph_div_2",
-                    className="pretty_container twelve columns",
-                ),
+                    html.Div(
+                        [dcc.Graph(id="si_pie_graph")],
+                        id="si_pie_graph_div_1",
+                        className="pretty_container six columns",
+                        style={'backgroundColor': 'white'}
+                    ),
+                    
+                    html.Div(
+                        [dcc.Graph(id="si_pie_graph_2")],
+                        id="si_pie_graph_div_2",
+                        className="pretty_container six columns",
+                        style={'backgroundColor': 'white', 'display': 'none'}
+                    )
                 
                 ],
                 className="row flex-display",
             ),
             
             # DIV ROW 5
-            html.Div([
-                html.Div(
-                    [dcc.Graph(id="plots_boxplot")],
-                    className="pretty_container twelve columns",
-                ),
+            html.Div(
+                children=[
                 
-                html.Div(
-                    [dcc.Graph(id="plots_boxplot_2")],
-                    id="plots_boxplot_div_2",
-                    className="pretty_container twelve columns",
-                ),
+                    html.Div(
+                        [dcc.Graph(id="plots_boxplot")],
+                        id="plots_boxplot_div_1",
+                        className="pretty_container six columns",
+                        style={'backgroundColor': 'white'}
+                    ),
+                    
+                    html.Div(
+                        [dcc.Graph(id="plots_boxplot_2")],
+                        id="plots_boxplot_div_2",
+                        className="pretty_container six columns",
+                        style={'backgroundColor': 'white', 'display': 'none'}
+                    )
                 
                 ],
                 className="row flex-display",
@@ -564,7 +583,8 @@ app.layout = html.Div([
 
             # DIV ROW 6
             html.Div(
-                [
+                children=[
+                
                     html.Div([
                         html.Div(
                             [
@@ -587,7 +607,9 @@ app.layout = html.Div([
                         ),
                         
                         ],
-                        className="pretty_container twelve columns",
+                        id="input_multi_graph_overTime_div_1",
+                        className="pretty_container six columns",
+                        style={'backgroundColor': 'white'}
                     ),
                     
                     html.Div([
@@ -613,62 +635,65 @@ app.layout = html.Div([
                         
                         ],
                         id="input_multi_graph_overTime_div_2",
-                        className="pretty_container twelve columns",
-                    ),
+                        className="pretty_container six columns",
+                        style={'backgroundColor': 'white', 'display': 'none'}
+                    )
                     
                 ],
                 className="row flex-display",
             ),
 
             # DIV ROW 7
-            html.Div([
+            html.Div(
+                children=[
             
-                html.Div(
-                    [
-                        dcc.Dropdown(
-                            id='input_multi_graph_events',
-                            options=[
-                                {'label': 'Events average per Month', 'value': 'events_per_month'},
-                                {'label': 'Events average per Year', 'value': 'events_per_year'}
-                            ],
-                            value='events_per_month',
-                            searchable=False
-                        ),
-                        html.Div(
-                            [dcc.Graph(id="output_multi_graph_events")],
-                            className="twelve columns",
-                            style={'backgroundColor': 'white'}
-                        ),
-                    ],
-                    className="pretty_container twelve columns",
-                ),
-                
-                html.Div(
-                    [
-                        dcc.Dropdown(
-                            id='input_multi_graph_events_2',
-                            options=[
-                                {'label': 'Events average per Month', 'value': 'events_per_month'},
-                                {'label': 'Events average per Year', 'value': 'events_per_year'}
-                            ],
-                            value='events_per_month',
-                            searchable=False
-                        ),
-                        html.Div(
-                            [dcc.Graph(id="output_multi_graph_events_2")],
-                            className="twelve columns",
-                            style={'backgroundColor': 'white'}
-                        ),
-                    ],
-                    id="multi_graph_events_div_2",
-                    className="pretty_container twelve columns",
-                ),
-                
-            
-            ],
-            className="row flex-display",
+                    html.Div(
+                        [
+                            dcc.Dropdown(
+                                id='input_multi_graph_events',
+                                options=[
+                                    {'label': 'Events average per Month', 'value': 'events_per_month'},
+                                    {'label': 'Events average per Year', 'value': 'events_per_year'}
+                                ],
+                                value='events_per_month',
+                                searchable=False
+                            ),
+                            html.Div(
+                                [dcc.Graph(id="output_multi_graph_events")],
+                                className="twelve columns",
+                                style={'backgroundColor': 'white'}
+                            ),
+                        ],
+                        id="multi_graph_events_div_1",
+                        className="pretty_container six columns",
+                        style={'backgroundColor': 'white'}
+                    ),
+                    
+                    html.Div(
+                        [
+                            dcc.Dropdown(
+                                id='input_multi_graph_events_2',
+                                options=[
+                                    {'label': 'Events average per Month', 'value': 'events_per_month'},
+                                    {'label': 'Events average per Year', 'value': 'events_per_year'}
+                                ],
+                                value='events_per_month',
+                                searchable=False
+                            ),
+                            html.Div(
+                                [dcc.Graph(id="output_multi_graph_events_2")],
+                                className="twelve columns",
+                                style={'backgroundColor': 'white'}
+                            ),
+                        ],
+                        id="multi_graph_events_div_2",
+                        className="pretty_container six columns",
+                        style={'backgroundColor': 'white', 'display': 'none'}
+                    )
+
+                ],
+                className="row flex-display",
             )
-            
 
         ]),
 
@@ -803,20 +828,41 @@ def update_filter_hours(hours_slider):
 # =============================================================================
 @app.callback(
     [
-        Output('cross-filter-options_2', 'style'),
-        Output('count_year_graph_div_2', 'style'),
-        Output('map_div_2', 'style'),
-        Output('map_events_graph_div_2', 'style'),
-        Output('si_pie_graph_div_2', 'style'),
-        Output('plots_boxplot_div_2', 'style'),
-        Output('input_multi_graph_overTime_div_2', 'style'),
-        Output('multi_graph_events_div_2', 'style'),
+        Output('cross-filter-options', 'className'), Output('cross-filter-options_2', 'style'),
+        Output('count_year_graph_div_1', 'className'), Output('count_year_graph_div_2', 'style'),
+        Output('map_div_1', 'className'), Output('map_div_2', 'style'),
+        Output('map_events_graph_div_1', 'className'), Output('map_events_graph_div_2', 'style'),
+        Output('si_pie_graph_div_1', 'className'), Output('si_pie_graph_div_2', 'style'),
+        Output('plots_boxplot_div_1', 'className'), Output('plots_boxplot_div_2', 'style'),
+        Output('input_multi_graph_overTime_div_1', 'className'), Output('input_multi_graph_overTime_div_2', 'style'),
+        Output('multi_graph_events_div_1', 'className'), Output('multi_graph_events_div_2', 'style'),
     ],
     [Input('my-input', 'value')])
-def show_compare(my_input):
+def show_rules(my_input):
     if my_input:
-        return [{'display': 'inline-block'}, {'display': 'inline-block'}, {'display': 'inline-block'}, {'display': 'inline-block'}, {'display': 'inline-block'}, {'display': 'inline-block'}, {'display': 'inline-block'}, {'display': 'inline-block'}]
-    return [{'display': 'none'}, {'display': 'none'}, {'display': 'none'}, {'display': 'none'}, {'display': 'none'}, {'display': 'none'}, {'display': 'none'}, {'display': 'none'}]
+        # rule for Verlgleichsanalyse
+        return [
+                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
+                ]
+    
+    # rule for Einzelanalyse
+    return [
+                "pretty_container twelve columns", {'display': 'none'},
+                "pretty_container twelve columns", {'display': 'none'},
+                "pretty_container twelve columns", {'display': 'none'},
+                "pretty_container twelve columns", {'display': 'none'},
+                "pretty_container twelve columns", {'display': 'none'},
+                "pretty_container twelve columns", {'display': 'none'},
+                "pretty_container twelve columns", {'display': 'none'},
+                "pretty_container twelve columns", {'display': 'none'},
+            ]
 
 
 
