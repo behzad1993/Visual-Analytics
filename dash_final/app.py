@@ -745,8 +745,11 @@ def plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items
     )
     layout_pie["font"] = dict(color="#777777")
     layout_pie["legend"] = dict(
-        font=dict(color="#CCCCCC", size="4"), orientation="h", bgcolor="rgba(0,0,0,0)"
+        font=dict(size="12"), orientation="v"
     )
+    layout_pie["plot_bgcolor"] = '#FFFFFF'
+    layout_pie["paper_bgcolor"] = '#FFFFFF'
+
 
     figure = dict(data=data, layout=layout_pie)
     return figure
@@ -877,6 +880,10 @@ def show_rules(my_input):
 # =============================================================================
 # Events average per Year
 # =============================================================================
+def getFigure_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items):
+    return data_builder.get_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, False, interval_radio_items)
+
+
 @app.callback(
     Output(component_id='count_year_graph', component_property='figure'),
     [Input("year_slider", "value"),
@@ -889,8 +896,7 @@ def show_rules(my_input):
      Input("interval_radio_items", "value")])
 def plot_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                          country_list, interval_radio_items):
-    return data_builder.get_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
-                                            hours_range, country_list, False, interval_radio_items)
+    return getFigure_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
 
 
 @app.callback(
@@ -905,8 +911,7 @@ def plot_events_per_year(year_range, month_range, si_range, area_range, map_size
      Input("interval_radio_items_2", "value")])
 def plot_events_per_year_2(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                          country_list, interval_radio_items):
-    return data_builder.get_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
-                                            hours_range, country_list, False, interval_radio_items)
+    return getFigure_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
 
 
 
@@ -916,16 +921,7 @@ def plot_events_per_year_2(year_range, month_range, si_range, area_range, map_si
 # =============================================================================
 # Map
 # =============================================================================
-@app.callback(
-    Output(component_id='map', component_property='figure'),
-    [Input("year_slider", "value"),
-     Input("month_slider", "value"),
-     Input("si_slider", "value"),
-     Input("area_slider", "value"),
-     Input("map_size_radio_items", "value"),
-     Input("hours_slider", "value"),
-     Input("country_selector", "value")])
-def plot_scatter_mapbox(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+def getFigure_scatter_mapbox(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
     tmp = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
     # plot map
@@ -948,6 +944,18 @@ def plot_scatter_mapbox(year_range, month_range, si_range, area_range, map_size_
     )
 
     return fig
+
+@app.callback(
+    Output(component_id='map', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_scatter_mapbox(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    return getFigure_scatter_mapbox(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
 
 @app.callback(
@@ -960,28 +968,7 @@ def plot_scatter_mapbox(year_range, month_range, si_range, area_range, map_size_
      Input("hours_slider_2", "value"),
      Input("country_selector_2", "value")])
 def plot_scatter_mapbox_2(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
-    tmp = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
-
-    # plot map
-    # https://plotly.com/python/reference/scattermapbox/
-    px.set_mapbox_access_token(mapbox_token)
-    fig = px.scatter_mapbox(tmp,
-                            lat="lat", lon="lon",
-                            color=map_size_radio_items,
-                            text='event_id',
-                            size="area", size_max=20,
-                            zoom=3,
-                            color_continuous_scale=px.colors.sequential.Inferno)
-
-    fig.update_traces(mode='markers', selector=dict(type='scattermapbox'))
-    fig.update_layout(
-        autosize=True,
-        margin=dict(l=0, r=0, b=0, t=0),
-        legend=dict(font=dict(size=10), orientation="h"),
-        mapbox=dict(style="light")
-    )
-
-    return fig
+    return getFigure_scatter_mapbox(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
 
 
@@ -989,8 +976,7 @@ def plot_scatter_mapbox_2(year_range, month_range, si_range, area_range, map_siz
 # =============================================================================
 # Event from Map
 # =============================================================================
-@app.callback(Output("map_events_graph", "figure"), [Input("map", "hoverData")])
-def plot_map_events_graph(map_events_graph):
+def getFigure_map_events_graph(map_events_graph):
     layout_individual = copy.deepcopy(layout)
 
     try:
@@ -1021,57 +1007,31 @@ def plot_map_events_graph(map_events_graph):
         ),
     ]
     layout_individual["title"] = str('Event ' + str(event_id) + ' (map hover)')
-
+    layout_individual["plot_bgcolor"] = '#FFFFFF'
+    layout_individual["paper_bgcolor"] = '#FFFFFF'
+    
     figure = dict(data=data, layout=layout_individual)
     return figure
+
+@app.callback(Output("map_events_graph", "figure"), [Input("map", "hoverData")])
+def plot_map_events_graph(map_events_graph):
+    return getFigure_map_events_graph(map_events_graph)
 
 
 @app.callback(Output("map_events_graph_2", "figure"), [Input("map_2", "hoverData")])
 def plot_map_events_graph_2(map_events_graph):
-    layout_individual = copy.deepcopy(layout)
-
-    try:
-        event_id = int(map_events_graph['points'][0]['text'])
-    except:
-        event_id = 201706413
-
-    tmp = df[df['event_id'] == event_id]
-
-    data = [
-        dict(
-            type="scatter",
-            mode="lines+markers",
-            name="Area",
-            x=tmp.date,
-            y=tmp.area * 10,
-            line=dict(shape="spline", smoothing=2, width=1, color="#92d8d8"),
-            marker=dict(symbol="diamond-open"),
-        ),
-        dict(
-            type="scatter",
-            mode="lines+markers",
-            name="Max Precipitation",
-            x=tmp.date,
-            y=tmp.maxPrec,
-            line=dict(shape="spline", smoothing=2, width=1, color="#fac1b7"),
-            marker=dict(symbol="diamond-open"),
-        ),
-    ]
-    layout_individual["title"] = str('Event ' + str(event_id) + ' (map hover)')
-
-    figure = dict(data=data, layout=layout_individual)
-    return figure
-
-
-
-
-
+    return getFigure_map_events_graph(map_events_graph)
 
 
 
 # =============================================================================
 # Severety of events
 # =============================================================================
+def getFigure_pie_graph(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    figure = plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    return figure
+
+
 @app.callback(
     Output(component_id='si_pie_graph', component_property='figure'),
     [Input("year_slider", "value"),
@@ -1082,8 +1042,7 @@ def plot_map_events_graph_2(map_events_graph):
      Input("hours_slider", "value"),
      Input("country_selector", "value")])
 def plot_pie_graph(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
-    figure = plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
-    return figure
+    return getFigure_pie_graph(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
 
 @app.callback(
@@ -1096,32 +1055,14 @@ def plot_pie_graph(year_range, month_range, si_range, area_range, map_size_radio
      Input("hours_slider_2", "value"),
      Input("country_selector_2", "value")])
 def plot_pie_graph_2(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
-    figure = plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
-    return figure
-
-
-
-
-
-
-
-
+    return getFigure_pie_graph(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
 
 
 # =============================================================================
 # Box plots
 # =============================================================================
-@app.callback(
-    Output(component_id='plots_boxplot', component_property='figure'),
-    [Input("year_slider", "value"),
-     Input("month_slider", "value"),
-     Input("si_slider", "value"),
-     Input("area_slider", "value"),
-     Input("map_size_radio_items", "value"),
-     Input("hours_slider", "value"),
-     Input("country_selector", "value")])
-def plot_boxplots(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+def getFigure_boxplots(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
     tmp = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
     # TODO CODE
@@ -1150,6 +1091,19 @@ def plot_boxplots(year_range, month_range, si_range, area_range, map_size_radio_
     fig.add_trace(go.Box(y=scaled.event_length, name="Duration"))
 
     return fig
+
+
+@app.callback(
+    Output(component_id='plots_boxplot', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_boxplots(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    return getFigure_boxplots(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
 
 @app.callback(
@@ -1162,44 +1116,7 @@ def plot_boxplots(year_range, month_range, si_range, area_range, map_size_radio_
      Input("hours_slider_2", "value"),
      Input("country_selector_2", "value")])
 def plot_boxplots_2(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
-    tmp = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
-
-    # TODO CODE
-    # Histogram with all outliers combined as e.g. >30 hours
-
-    # return figure
-
-    from sklearn.preprocessing import MinMaxScaler
-    import plotly.graph_objects as go
-
-    scaler = MinMaxScaler()
-    min_max_scaler = MinMaxScaler()
-    scaled = tmp.copy()
-    scaled[['event_si', 'event_area', 'event_pre', 'event_length']] = min_max_scaler.fit_transform(
-        scaled[['event_si', 'event_area', 'event_pre', 'event_length']])  # event_area instead of area used!
-
-    scaled['event_si'] = scaled['event_si'].round(decimals=3)
-    scaled['event_area'] = scaled['event_area'].round(decimals=3)
-    scaled['event_pre'] = scaled['event_pre'].round(decimals=3)
-    scaled['event_length'] = scaled['event_length'].round(decimals=3)
-
-    fig = go.Figure()
-    fig.add_trace(go.Box(y=scaled.event_si, name="Severity"))
-    fig.add_trace(go.Box(y=scaled.event_area, name="Area"))
-    fig.add_trace(go.Box(y=scaled.event_pre, name="Precipitation"))
-    fig.add_trace(go.Box(y=scaled.event_length, name="Duration"))
-
-    return fig
-
-
-
-
-
-
-
-
-
-
+    return getFigure_boxplots(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
 
 
@@ -1207,19 +1124,7 @@ def plot_boxplots_2(year_range, month_range, si_range, area_range, map_size_radi
 # =============================================================================
 # ... over time
 # =============================================================================
-@app.callback(
-    Output(component_id='multi_graph', component_property='figure'),
-    [Input("input_multi_graph_overTime", "value"),
-     Input("year_slider", "value"),
-     Input("month_slider", "value"),
-     Input("si_slider", "value"),
-     Input("area_slider", "value"),
-     Input("map_size_radio_items", "value"),
-     Input("hours_slider", "value"),
-     Input("country_selector", "value"),
-     Input("interval_radio_items", "value")])
-def plot_duration(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
-                  country_list, interval_radio_items):
+def getFigure_duration(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items):
     if current_figure == "event_length":
         return data_builder.get_duration_per_year(year_range, month_range, si_range, area_range,
                                                   map_size_radio_items, hours_range, country_list, interval_radio_items)
@@ -1238,6 +1143,21 @@ def plot_duration(current_figure, year_range, month_range, si_range, area_range,
                                                        interval_radio_items)
 
     return None
+
+
+@app.callback(
+    Output(component_id='multi_graph', component_property='figure'),
+    [Input("input_multi_graph_overTime", "value"),
+     Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value"),
+     Input("interval_radio_items", "value")])
+def plot_duration(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items):
+    return getFigure_duration(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
 
 
 @app.callback(
@@ -1251,32 +1171,8 @@ def plot_duration(current_figure, year_range, month_range, si_range, area_range,
      Input("hours_slider_2", "value"),
      Input("country_selector_2", "value"),
      Input("interval_radio_items_2", "value")])
-def plot_duration_2(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
-                  country_list, interval_radio_items):
-    if current_figure == "event_length":
-        return data_builder.get_duration_per_year(year_range, month_range, si_range, area_range,
-                                                  map_size_radio_items, hours_range, country_list, interval_radio_items)
-
-    if current_figure == "event_si":
-        return data_builder.get_severity_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
-                                                  hours_range, country_list, interval_radio_items)
-
-    if current_figure == "event_area":
-        return data_builder.get_area_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
-                                              hours_range, country_list, interval_radio_items)
-
-    if current_figure == "event_pre":
-        return data_builder.get_precipitation_per_year(year_range, month_range, si_range, area_range,
-                                                       map_size_radio_items, hours_range, country_list,
-                                                       interval_radio_items)
-
-    return None
-
-
-
-
-
-
+def plot_duration_2(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items):
+    return getFigure_duration(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
 
 
 
@@ -1284,6 +1180,18 @@ def plot_duration_2(current_figure, year_range, month_range, si_range, area_rang
 # =============================================================================
 # Events per Month/Year
 # =============================================================================
+def getFigure_events_per_year_or_month(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items):
+    if current_figure == "events_per_month":
+        return data_builder.get_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items,
+                                                 hours_range, country_list)
+
+    if current_figure == "events_per_year":
+        return data_builder.get_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
+                                                hours_range, country_list, True, interval_radio_items)
+
+    return None
+
+
 @app.callback(
     Output(component_id='output_multi_graph_events', component_property='figure'),
     [Input("input_multi_graph_events", "value"),
@@ -1295,17 +1203,8 @@ def plot_duration_2(current_figure, year_range, month_range, si_range, area_rang
      Input("hours_slider", "value"),
      Input("country_selector", "value"),
      Input("interval_radio_items", "value")])
-def plot_events_per_year_or_month(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items,
-                                  hours_range, country_list, interval_radio_items):
-    if current_figure == "events_per_month":
-        return data_builder.get_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items,
-                                                 hours_range, country_list)
-
-    if current_figure == "events_per_year":
-        return data_builder.get_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
-                                                hours_range, country_list, True, interval_radio_items)
-
-    return None
+def plot_events_per_year_or_month(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items):
+    return getFigure_events_per_year_or_month(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
 
 
 @app.callback(
@@ -1319,17 +1218,8 @@ def plot_events_per_year_or_month(current_figure, year_range, month_range, si_ra
      Input("hours_slider_2", "value"),
      Input("country_selector_2", "value"),
      Input("interval_radio_items_2", "value")])
-def plot_events_per_year_or_month_2(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items,
-                                  hours_range, country_list, interval_radio_items):
-    if current_figure == "events_per_month":
-        return data_builder.get_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items,
-                                                 hours_range, country_list)
-
-    if current_figure == "events_per_year":
-        return data_builder.get_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items,
-                                                hours_range, country_list, True, interval_radio_items)
-
-    return None
+def plot_events_per_year_or_month_2(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items):
+    return getFigure_events_per_year_or_month(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
 
 
 

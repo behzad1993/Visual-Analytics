@@ -233,7 +233,7 @@ def get_layout(figure, title, scale):
         hovermode="x",
         hoverdistance=100,  # Distance to show hover label of data point
         spikedistance=1000,
-        legend=dict(font=dict(size=10), orientation="h"),
+        legend=dict(font=dict(size=12), orientation="v"),
 
         # Distance to show spike
         xaxis=dict(
@@ -245,23 +245,6 @@ def get_layout(figure, title, scale):
         ),
     )
 
-
-# layout = dict(
-#     autosize=True,
-#     automargin=True,
-#     margin=dict(l=30, r=30, b=20, t=40),
-#     hovermode="closest",
-#     plot_bgcolor="#F9F9F9",
-#     paper_bgcolor="#F9F9F9",
-#     legend=dict(font=dict(size=10), orientation="h"),
-#     title="Satellite Overview",
-#     mapbox=dict(
-#         accesstoken=mapbox_token,
-#         style="light",
-#         center=dict(lon=-78.05, lat=42.54),
-#         zoom=7,
-#     ),
-# )
 
 
 init_data()
