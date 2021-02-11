@@ -28,6 +28,8 @@ import dash_html_components as html
 import data_builder
 import dash_daq as daq
 from bubbly.bubbly import bubbleplot
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
 
 # =============================================================================
 # Settinga & Data
@@ -65,6 +67,8 @@ countries_options = [
     for country in country_list
 ]
 
+color_set = ['#72d499','#cbabff','#fcc168','#f08686','#88ccee','#b5e66c']
+
 # =============================================================================
 # Header
 # =============================================================================
@@ -88,11 +92,11 @@ app.layout = html.Div([
             className="one-half column", id="title",
         ),
 
-        html.Div(
-            [html.A(html.Button("About us", id="learn-more-button"),
-                    href="https://www.hu-berlin.de/de", )],
-            className="one-third column", id="button",
-        ),
+        # html.Div(
+        #     [html.A(html.Button("About us", id="learn-more-button"),
+        #             href="https://www.hu-berlin.de/de", )],
+        #     className="one-third column", id="button",
+        # ),
     ],
         id="header",
         className="row flex-display",
@@ -364,11 +368,11 @@ app.layout = html.Div([
                     html.Div(
                         [dcc.Graph(id="multi_graph")],
                         className="twelve columns",
-                        style={'backgroundColor': 'white'}
+                        #style={'backgroundColor': 'white'}
                     ),
                 ],
                 className="pretty_container row",
-                style={'backgroundColor': 'white'}
+                #style={'backgroundColor': 'white'}
             ),
 
             # DIV ROW 6
@@ -385,11 +389,11 @@ app.layout = html.Div([
                     html.Div(
                         [dcc.Graph(id="output_multi_graph_events")],
                         className="twelve columns",
-                        style={'backgroundColor': 'white'}
+                        #style={'backgroundColor': 'white'}
                     ),
                 ],
                 className="pretty_container row",
-                style={'backgroundColor': 'white'}
+                #style={'backgroundColor': 'white'}
             ),
 
         ]),
@@ -721,8 +725,8 @@ layout = dict(
     automargin=True,
     margin=dict(l=30, r=30, b=20, t=40),
     hovermode="closest",
-    plot_bgcolor="#F9F9F9",
-    paper_bgcolor="#F9F9F9",
+    #plot_bgcolor="#F9F9F9",
+    #paper_bgcolor="#F9F9F9",
     legend=dict(font=dict(size=10), orientation="h"),
     title="Satellite Overview",
     mapbox=dict(
@@ -822,15 +826,15 @@ def plot_scatter_mapbox(year_range, month_range, si_range, area_range, map_size_
                             text='event_id',
                             size="area", size_max=20,
                             zoom=3,
-                            color_continuous_scale=px.colors.sequential.Inferno)
+                            color_continuous_scale=px.colors.sequential.Purp)#px.colors.sequential.Inferno)
 
     fig.update_traces(mode='markers', selector=dict(type='scattermapbox'))
     fig.update_layout(
         autosize=True,
         margin=dict(l=0, r=0, b=0, t=0),
-        paper_bgcolor="#F9F9F9",
+        #paper_bgcolor="#F9F9F9",
         legend=dict(font=dict(size=10), orientation="h"),
-        plot_bgcolor="#F9F9F9",
+        #plot_bgcolor="#F9F9F9",
         mapbox=dict(style="light")
     )
 
@@ -956,7 +960,7 @@ def plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items
             hoverinfo="text+value+percent",
             textinfo="label+percent+value",
             # hole=0.5,
-            marker=dict(colors=["#fac1b7", "#a9bb95", "#92d8d8", "#72d8d8"]),
+            marker=dict(colors=[color_set[4],color_set[1],color_set[2],color_set[0]]),
             # domain={"x": [0, 0.45], "y": [0.2, 0.8]},
         ),
         # dict(
@@ -974,9 +978,9 @@ def plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items
     layout_pie["title"] = "Severity of Events: {} to {}".format(
         year_range[0], year_range[1]
     )
-    layout_pie["font"] = dict(color="#777777")
+    #layout_pie["font"] = dict(color="#777777")
     layout_pie["legend"] = dict(
-        font=dict(color="#CCCCCC", size="4"), orientation="h", bgcolor="rgba(0,0,0,0)"
+        font=dict( size="11"), orientation="h" #color="#CCCCCC",
     )
 
     figure = dict(data=data, layout=layout_pie)
@@ -1152,25 +1156,11 @@ def plot_boxplots(year_range, month_range, si_range, area_range, map_size_radio_
 
     # return figure
 
-    from sklearn.preprocessing import MinMaxScaler
-    import plotly.graph_objects as go
-
-    scaler = MinMaxScaler()
-    min_max_scaler = MinMaxScaler()
-    scaled = tmp.copy()
-    scaled[['event_si', 'event_area', 'event_pre', 'event_length']] = min_max_scaler.fit_transform(
-        scaled[['event_si', 'event_area', 'event_pre', 'event_length']])  # event_area instead of area used!
-
-    scaled['event_si'] = scaled['event_si'].round(decimals=3)
-    scaled['event_area'] = scaled['event_area'].round(decimals=3)
-    scaled['event_pre'] = scaled['event_pre'].round(decimals=3)
-    scaled['event_length'] = scaled['event_length'].round(decimals=3)
-
-    fig = go.Figure()
-    fig.add_trace(go.Box(y=scaled.event_si, name="Severity"))
-    fig.add_trace(go.Box(y=scaled.event_area, name="Area"))
-    fig.add_trace(go.Box(y=scaled.event_pre, name="Precipitation"))
-    fig.add_trace(go.Box(y=scaled.event_length, name="Duration"))
+    fig = make_subplots(rows=1,cols=4)
+    fig.append_trace(go.Box(y=tmp.event_si, name="Severity",marker=dict(color=color_set[0])),row=1,col=1)
+    fig.append_trace(go.Box(y=tmp.event_area, name="Area",marker=dict(color=color_set[1])),row=1,col=2)
+    fig.append_trace(go.Box(y=tmp.event_pre, name="Precipitation",marker=dict(color=color_set[2])),row=1,col=3)
+    fig.append_trace(go.Box(y=tmp.event_length, name="Duration",marker=dict(color=color_set[3])),row=1,col=4)
 
     return fig
 
@@ -1183,4 +1173,4 @@ df.columns.names
 
 
 if __name__ == "__main__":
-    app.run_server(debug=False, host='0.0.0.0', port=8050)
+    app.run_server(debug=False,  port=8050) #host='0.0.0.0',

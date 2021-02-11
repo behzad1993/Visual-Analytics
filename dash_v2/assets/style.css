@@ -11,7 +11,7 @@
 .filter-label{
   text-align: right;
   color: #a3a3a3;
-  font-size: 9px;
+  font-size: 13px;
 }
 .control_label{
   font-size: 13px;
@@ -37,7 +37,10 @@
     display: unset;
 }
 .Select--multi .Select-value {
-  font-size: 10px;
+  font-size: 12px;
   margin-left: 2px;
   margin-top: 1px;
+}
+.pretty_container {
+    background-color: #3f4f75;
 }
