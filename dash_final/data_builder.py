@@ -210,7 +210,8 @@ def plot_property_per_time_scale(plot1, plot2, plot3, x_title, y_title, table_ti
         figure = make_subplots(specs=[[{"secondary_y": True}]])
         figure.add_bar(x=plot1.x, y=plot1.y, name=plot1.name, marker_color='rgba(123,199,255, 0.8)')
     else:
-        figure = px.bar(x=plot1.x, y=plot1.y, title=plot1.name, color=plot1.stacked)
+        color_set = ['#72d499','#cbabff','#fcc168','#f08686','#88ccee','#b5e66c']
+        figure = px.bar(x=plot1.x, y=plot1.y, title=plot1.name, color=plot1.stacked, color_discrete_sequence=color_set)
 
     if plot2 is not None:
         figure.add_trace(
@@ -233,7 +234,7 @@ def get_layout(figure, title, scale):
         hovermode="x",
         hoverdistance=100,  # Distance to show hover label of data point
         spikedistance=1000,
-        legend=dict(font=dict(size=12), orientation="v"),
+        legend=dict(font=dict(size=12), orientation="h"),
 
         # Distance to show spike
         xaxis=dict(

@@ -9,13 +9,16 @@
   font-size: 16px;
 }
 .filter-label{
-  text-align: right;
+  float: right;
   color: #a3a3a3;
   font-size: 13px;
 }
 .control_label{
   font-size: 13px;
   padding: 0px;
+}
+#map_size_radio_items, #interval_radio_items {
+  display: grid;
 }
 .rc-slider-tooltip-inner {
     padding: 1px 0px;
@@ -41,6 +44,22 @@
   margin-left: 2px;
   margin-top: 1px;
 }
-.pretty_container {
-    background-color: #3f4f75;
+
+
+@media only screen and (min-width: 1000px) {
+  #mainContainer{
+    padding-left: 10%;
+    padding-right: 10%;
+  }
 }
+/*.pretty_container {
+    background-color: #c0dbb4;
+}
+body{
+    background-color: #8c94a7;
+}
+#react-entry-point{
+  max-width: 80%;
+  max-width: 1000px;
+
+}*/

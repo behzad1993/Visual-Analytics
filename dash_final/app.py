@@ -24,11 +24,13 @@ import dash_html_components as html
 import data_builder
 import dash_daq as daq
 from bubbly.bubbly import bubbleplot
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 
 import warnings; warnings.simplefilter('ignore')
 
-
+color_set = ['#72d499','#cbabff','#fcc168','#f08686','#88ccee','#b5e66c']
 # =============================================================================
 # Settinga & Data
 # =============================================================================
@@ -75,27 +77,27 @@ app.layout = html.Div([
     html.Div(id="output-clientside"),
 
     html.Div([
-        html.Div(
-            [html.Img(src=app.get_asset_url("rain-logo.png"), id="plotly-image",
-                      style={"height": "100px", "width": "auto", "margin-bottom": "0px"})],
-            className="one-third column",
-        ),
+        # html.Div(
+        #     [html.Img(src=app.get_asset_url("rain-logo.png"), id="plotly-image",
+        #               style={"height": "100px", "width": "auto", "margin-bottom": "0px"})],
+        #     className="one-third column",
+        # ),
 
         html.Div(
             [html.Div([
-                html.H3("Heavy Rain Events", style={"margin-bottom": "0px"}),
-                html.H5("in Central Europe", style={"margin-top": "0px"}), ])],
-            className="one-half column", id="title",
+                html.H1("Heavy Rain Events", style={"margin-bottom": "0px","margin-top": "40px"}),
+                html.H3("in Central Europe", style={"margin-top": "0px"}), ])],
+            id="title", #className="one-half column",
         ),
 
-        html.Div(
-            [html.A(html.Button("About us", id="learn-more-button"),
-                    href="https://www.hu-berlin.de/de", )],
-            className="one-third column", id="button",
-        ),
+        # html.Div(
+        #     [html.A(html.Button("About us", id="learn-more-button"),
+        #             href="https://www.hu-berlin.de/de", )],
+        #     className="one-third column", id="button",
+        # ),
     ],
         id="header",
-        className="row flex-display",
+        className="row", #flex-display
         style={"margin-bottom": "25px"},
     ),
 
@@ -109,7 +111,7 @@ app.layout = html.Div([
             html.Div(
                 html.Label("Individual analysis"),
                 className="five columns",
-                style={'textAlign': 'right'}
+                style={'textAlign': 'right','font-size':'20px'}
             ),
             html.Div(
 
@@ -127,20 +129,12 @@ app.layout = html.Div([
             html.Div(
                 html.Label("Comparative analysis"),
                 className="five columns",
-                style={'textAlign': 'left'}
+                style={'textAlign': 'left','font-size':'20px'}
             ),
 
         ],
-        className="row flex-display",
+        className="row flex-display",style={'padding-bottom':'20px'}
     ),
-    
-    
-    
-    
-    
-    
-    
-    
 
     # =============================================================================
     # CONTAINER SINGLE START
@@ -302,7 +296,7 @@ app.layout = html.Div([
                     ),
 
                 ],
-                    className="pretty_container six columns",
+                    className="pretty_container five columns",
                     id="cross-filter-options",
                     style={'backgroundColor': 'white'}
                 ),
@@ -456,7 +450,7 @@ app.layout = html.Div([
                 ],
                     className="pretty_container six columns",
                     id="cross-filter-options_2",
-                    style={'backgroundColor': 'white', 'display': 'none'}
+                    style={'display': 'none'} #'backgroundColor': 'white', 
                 )
 
             ],
@@ -478,7 +472,7 @@ app.layout = html.Div([
                         [dcc.Graph(id="count_year_graph")],
                         className="pretty_container six columns",
                         id="count_year_graph_div_1",
-                        style={'backgroundColor': 'white'}
+                        #style={'backgroundColor': 'white'}
                         
                     ),
                     
@@ -486,7 +480,7 @@ app.layout = html.Div([
                         [dcc.Graph(id="count_year_graph_2")],
                         className="pretty_container six columns",
                         id="count_year_graph_div_2",
-                        style={'backgroundColor': 'white', 'display': 'none'}
+                        style={'display': 'none'} #'backgroundColor': 'white', 
                     )
                     
                 ],
@@ -501,14 +495,14 @@ app.layout = html.Div([
                         [dcc.Graph(id="map")],
                         id="map_div_1",
                         className="pretty_container six columns",
-                        style={'backgroundColor': 'white'}
+                        #style={'backgroundColor': 'white'}
                     ),
                     
                     html.Div(
                         [dcc.Graph(id="map_2")],
                         id="map_div_2",
                         className="pretty_container six columns",
-                        style={'backgroundColor': 'white', 'display': 'none'}
+                        style={'display': 'none'} #'backgroundColor': 'white', 
                     )
                 
                 ],
@@ -523,14 +517,14 @@ app.layout = html.Div([
                         [dcc.Graph(id="map_events_graph")],
                         id="map_events_graph_div_1",
                         className="pretty_container six columns",
-                        style={'backgroundColor': 'white'}
+                        #style={'backgroundColor': 'white'}
                     ),
                     
                     html.Div(
                         [dcc.Graph(id="map_events_graph_2")],
                         id="map_events_graph_div_2",
                         className="pretty_container six columns",
-                        style={'backgroundColor': 'white', 'display': 'none'}
+                        style={'display': 'none'} #'backgroundColor': 'white', 
                     )
                 
                 ],
@@ -545,14 +539,14 @@ app.layout = html.Div([
                         [dcc.Graph(id="si_pie_graph")],
                         id="si_pie_graph_div_1",
                         className="pretty_container six columns",
-                        style={'backgroundColor': 'white'}
+                        #style={'backgroundColor': 'white'}
                     ),
                     
                     html.Div(
                         [dcc.Graph(id="si_pie_graph_2")],
                         id="si_pie_graph_div_2",
                         className="pretty_container six columns",
-                        style={'backgroundColor': 'white', 'display': 'none'}
+                        style={'display': 'none'} #'backgroundColor': 'white', 
                     )
                 
                 ],
@@ -567,14 +561,14 @@ app.layout = html.Div([
                         [dcc.Graph(id="plots_boxplot")],
                         id="plots_boxplot_div_1",
                         className="pretty_container six columns",
-                        style={'backgroundColor': 'white'}
+                        #style={'backgroundColor': 'white'}
                     ),
                     
                     html.Div(
                         [dcc.Graph(id="plots_boxplot_2")],
                         id="plots_boxplot_div_2",
                         className="pretty_container six columns",
-                        style={'backgroundColor': 'white', 'display': 'none'}
+                        style={'display': 'none'} #'backgroundColor': 'white', 
                     )
                 
                 ],
@@ -609,7 +603,7 @@ app.layout = html.Div([
                         ],
                         id="input_multi_graph_overTime_div_1",
                         className="pretty_container six columns",
-                        style={'backgroundColor': 'white'}
+                        #style={'backgroundColor': 'white'}
                     ),
                     
                     html.Div([
@@ -636,7 +630,7 @@ app.layout = html.Div([
                         ],
                         id="input_multi_graph_overTime_div_2",
                         className="pretty_container six columns",
-                        style={'backgroundColor': 'white', 'display': 'none'}
+                        style={'display': 'none'} #'backgroundColor': 'white', 
                     )
                     
                 ],
@@ -661,12 +655,12 @@ app.layout = html.Div([
                             html.Div(
                                 [dcc.Graph(id="output_multi_graph_events")],
                                 className="twelve columns",
-                                style={'backgroundColor': 'white'}
+                                #style={'backgroundColor': 'white'}
                             ),
                         ],
                         id="multi_graph_events_div_1",
                         className="pretty_container six columns",
-                        style={'backgroundColor': 'white'}
+                        #style={'backgroundColor': 'white'}
                     ),
                     
                     html.Div(
@@ -683,12 +677,12 @@ app.layout = html.Div([
                             html.Div(
                                 [dcc.Graph(id="output_multi_graph_events_2")],
                                 className="twelve columns",
-                                style={'backgroundColor': 'white'}
+                                #style={'backgroundColor': 'white'}
                             ),
                         ],
                         id="multi_graph_events_div_2",
                         className="pretty_container six columns",
-                        style={'backgroundColor': 'white', 'display': 'none'}
+                        style={'display': 'none'} #'backgroundColor': 'white', 
                     )
 
                 ],
@@ -737,18 +731,18 @@ def plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items
             hoverinfo="text+value+percent",
             textinfo="label+percent+value",
             # hole=0.5,
-            marker=dict(colors=["#fac1b7", "#a9bb95", "#92d8d8", "#72d8d8"]),
+             marker=dict(colors=[color_set[0],color_set[1],color_set[2],color_set[4]]),
         ),
     ]
     layout_pie["title"] = "Severity of Events: {} to {}".format(
         year_range[0], year_range[1]
     )
-    layout_pie["font"] = dict(color="#777777")
+    #layout_pie["font"] = dict(color="#777777")
     layout_pie["legend"] = dict(
-        font=dict(size="12"), orientation="v"
+        font=dict(size="12"), orientation="h"
     )
-    layout_pie["plot_bgcolor"] = '#FFFFFF'
-    layout_pie["paper_bgcolor"] = '#FFFFFF'
+    #layout_pie["plot_bgcolor"] = '#FFFFFF'
+    #layout_pie["paper_bgcolor"] = '#FFFFFF'
 
 
     figure = dict(data=data, layout=layout_pie)
@@ -763,10 +757,10 @@ layout = dict(
     automargin=True,
     margin=dict(l=30, r=30, b=20, t=40),
     hovermode="closest",
-    plot_bgcolor="#F9F9F9",
-    paper_bgcolor="#F9F9F9",
+    #plot_bgcolor="#F9F9F9",
+    #paper_bgcolor="#F9F9F9",
     legend=dict(font=dict(size=10), orientation="h"),
-    title="Satellite Overview",
+    #title="Satellite Overview",
     mapbox=dict(
         accesstoken=mapbox_token,
         style="light",
@@ -845,14 +839,14 @@ def show_rules(my_input):
     if my_input:
         # rule for Verlgleichsanalyse
         return [
-                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block', 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
+                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
                 ]
     
     # rule for Einzelanalyse
@@ -933,7 +927,7 @@ def getFigure_scatter_mapbox(year_range, month_range, si_range, area_range, map_
                             text='event_id',
                             size="area", size_max=20,
                             zoom=3,
-                            color_continuous_scale=px.colors.sequential.Inferno)
+                            color_continuous_scale=px.colors.sequential.Purp)
 
     fig.update_traces(mode='markers', selector=dict(type='scattermapbox'))
     fig.update_layout(
@@ -993,8 +987,8 @@ def getFigure_map_events_graph(map_events_graph):
             name="Area",
             x=tmp.date,
             y=tmp.area * 10,
-            line=dict(shape="spline", smoothing=2, width=1, color="#92d8d8"),
-            marker=dict(symbol="diamond-open"),
+            line=dict(shape="spline", smoothing=2, color=color_set[1]),
+            marker=dict(symbol="circle"),
         ),
         dict(
             type="scatter",
@@ -1002,13 +996,14 @@ def getFigure_map_events_graph(map_events_graph):
             name="Max Precipitation",
             x=tmp.date,
             y=tmp.maxPrec,
-            line=dict(shape="spline", smoothing=2, width=1, color="#fac1b7"),
-            marker=dict(symbol="diamond-open"),
+            line=dict(shape="spline", smoothing=2, color=color_set[0]),
+            marker=dict(symbol="circle"),
         ),
     ]
     layout_individual["title"] = str('Event ' + str(event_id) + ' (map hover)')
-    layout_individual["plot_bgcolor"] = '#FFFFFF'
-    layout_individual["paper_bgcolor"] = '#FFFFFF'
+    #layout_individual["plot_bgcolor"] = '#FFFFFF'
+    #layout_individual["paper_bgcolor"] = '#FFFFFF'
+    layout_individual["legend"] = dict(font=dict(size="12"), orientation="h")
     
     figure = dict(data=data, layout=layout_individual)
     return figure
@@ -1070,26 +1065,32 @@ def getFigure_boxplots(year_range, month_range, si_range, area_range, map_size_r
 
     # return figure
 
-    from sklearn.preprocessing import MinMaxScaler
-    import plotly.graph_objects as go
+    # from sklearn.preprocessing import MinMaxScaler
+    # import plotly.graph_objects as go
 
-    scaler = MinMaxScaler()
-    min_max_scaler = MinMaxScaler()
-    scaled = tmp.copy()
-    scaled[['event_si', 'event_area', 'event_pre', 'event_length']] = min_max_scaler.fit_transform(
-        scaled[['event_si', 'event_area', 'event_pre', 'event_length']])  # event_area instead of area used!
+    # scaler = MinMaxScaler()
+    # min_max_scaler = MinMaxScaler()
+    # scaled = tmp.copy()
+    # scaled[['event_si', 'event_area', 'event_pre', 'event_length']] = min_max_scaler.fit_transform(
+    #     scaled[['event_si', 'event_area', 'event_pre', 'event_length']])  # event_area instead of area used!
 
-    scaled['event_si'] = scaled['event_si'].round(decimals=3)
-    scaled['event_area'] = scaled['event_area'].round(decimals=3)
-    scaled['event_pre'] = scaled['event_pre'].round(decimals=3)
-    scaled['event_length'] = scaled['event_length'].round(decimals=3)
+    # scaled['event_si'] = scaled['event_si'].round(decimals=3)
+    # scaled['event_area'] = scaled['event_area'].round(decimals=3)
+    # scaled['event_pre'] = scaled['event_pre'].round(decimals=3)
+    # scaled['event_length'] = scaled['event_length'].round(decimals=3)
 
-    fig = go.Figure()
-    fig.add_trace(go.Box(y=scaled.event_si, name="Severity"))
-    fig.add_trace(go.Box(y=scaled.event_area, name="Area"))
-    fig.add_trace(go.Box(y=scaled.event_pre, name="Precipitation"))
-    fig.add_trace(go.Box(y=scaled.event_length, name="Duration"))
-
+    # fig = go.Figure()
+    # fig.add_trace(go.Box(y=scaled.event_si, name="Severity"))
+    # fig.add_trace(go.Box(y=scaled.event_area, name="Area"))
+    # fig.add_trace(go.Box(y=scaled.event_pre, name="Precipitation"))
+    # fig.add_trace(go.Box(y=scaled.event_length, name="Duration"))
+    
+    fig = make_subplots(rows=1,cols=4)
+    fig.append_trace(go.Box(y=tmp.event_si, name="Severity",marker=dict(color=color_set[0])),row=1,col=1)
+    fig.append_trace(go.Box(y=tmp.event_area, name="Area",marker=dict(color=color_set[1])),row=1,col=2)
+    fig.append_trace(go.Box(y=tmp.event_pre, name="Precipitation",marker=dict(color=color_set[2])),row=1,col=3)
+    fig.append_trace(go.Box(y=tmp.event_length, name="Duration",marker=dict(color=color_set[3])),row=1,col=4)
+    fig.update_layout(title="Dispertion of Attributes",legend=dict(orientation="h"))
     return fig
 
 

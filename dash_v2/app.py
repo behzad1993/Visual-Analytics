@@ -79,17 +79,17 @@ app.layout = html.Div([
     html.Div(id="output-clientside"),
 
     html.Div([
-        html.Div(
-            [html.Img(src=app.get_asset_url("rain-logo.png"), id="plotly-image",
-                      style={"height": "100px", "width": "auto", "margin-bottom": "0px"})],
-            className="one-third column",
-        ),
+        # html.Div(
+        #     [html.Img(src=app.get_asset_url("rain-logo.png"), id="plotly-image",
+        #               style={"height": "100px", "width": "auto", "margin-bottom": "0px"})],
+        #     className="one-third column",
+        # ),
 
         html.Div(
             [html.Div([
-                html.H3("Heavy Rain Events", style={"margin-bottom": "0px"}),
-                html.H5("in Central Europe", style={"margin-top": "0px"}), ])],
-            className="one-half column", id="title",
+                html.H1("Heavy Rain Events", style={"margin-bottom": "0px","margin-top": "35px"}),
+                html.H3("in Central Europe", style={"margin-top": "0px"}), ])],
+            id="title", #className="one-half column",
         ),
 
         # html.Div(
@@ -99,7 +99,7 @@ app.layout = html.Div([
         # ),
     ],
         id="header",
-        className="row flex-display",
+        className="row", # flex-display",
         style={"margin-bottom": "25px"},
     ),
 
@@ -113,7 +113,7 @@ app.layout = html.Div([
             html.Div(
                 html.Label("Individual analysis"),
                 className="five columns",
-                style={'textAlign': 'right'}
+                style={'textAlign': 'right','font-size':'20px'}
             ),
             html.Div(
 
@@ -131,11 +131,11 @@ app.layout = html.Div([
             html.Div(
                 html.Label("Comparative analysis"),
                 className="five columns",
-                style={'textAlign': 'left'}
+                style={'textAlign': 'left','font-size':'20px'}
             ),
 
         ],
-        className="row flex-display",
+        className="row flex-display",style={'padding-bottom':'20px'}
     ),
 
     # =============================================================================
@@ -275,11 +275,11 @@ app.layout = html.Div([
                         className="control_label",
                         id='interval_radio_items',
                         options=[
-                            {'label': '1 year', 'value': 1},
-                            {'label': '3 year', 'value': 3},
-                            {'label': '5 years', 'value': 5},
-                            {'label': '7 years', 'value': 7},
-                            {'label': '10 years', 'value': 10}
+                            {'label': '1yr', 'value': 1},
+                            {'label': '3yr', 'value': 3},
+                            {'label': '5yr', 'value': 5},
+                            {'label': '7yr', 'value': 7},
+                            {'label': '10yr', 'value': 10}
                         ],
                         value=5,
                         labelStyle={'display': 'inline-block'}
@@ -723,7 +723,7 @@ def filter_events(year_range, month_range, si_range, area_range, map_size_radio_
 layout = dict(
     autosize=True,
     automargin=True,
-    margin=dict(l=30, r=30, b=20, t=40),
+    #margin=dict(l=30, r=30, b=20, t=40),
     hovermode="closest",
     #plot_bgcolor="#F9F9F9",
     #paper_bgcolor="#F9F9F9",
@@ -1161,7 +1161,7 @@ def plot_boxplots(year_range, month_range, si_range, area_range, map_size_radio_
     fig.append_trace(go.Box(y=tmp.event_area, name="Area",marker=dict(color=color_set[1])),row=1,col=2)
     fig.append_trace(go.Box(y=tmp.event_pre, name="Precipitation",marker=dict(color=color_set[2])),row=1,col=3)
     fig.append_trace(go.Box(y=tmp.event_length, name="Duration",marker=dict(color=color_set[3])),row=1,col=4)
-
+    fig.update_layout(title="Dispertion of Attributes",legend=dict(orientation="h"))
     return fig
 
 
