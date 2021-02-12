@@ -451,10 +451,10 @@ app.layout = html.Div([
                     className="pretty_container six columns",
                     id="cross-filter-options_2",
                     style={'display': 'none'} #'backgroundColor': 'white', 
-                )
+                ),
 
             ],
-                className="row flex-display",
+                className="row flex-display", 
             ),  # END Filter single
 
             
