@@ -41,23 +41,12 @@ server = app.server
 
 mapbox_token = 'pk.eyJ1IjoiZGF2aWQ5OTgiLCJhIjoiY2tobWliNDdrMGZvYTJxazFvcXpseHFvZSJ9.CpgPLYfVXI3qUH4zI90gBQ'
 
-# df = pd.read_csv("../events_all.csv")
-# df = df[df['event_si'] >= 0.01]
-# df = pd.read_csv("events_filtered_country.csv")
-# df['event_start'] = pd.to_datetime(df['event_start'])
-# df['event_year'] = df['event_start'].dt.year
-# df['event_month'] = df['event_start'].dt.month
-# df['country'] = df['country'].fillna('INT')
-# df.to_pickle("event_filtered.pickle")
-# df.dtypes
-
 df = pd.read_pickle("event_filtered.pickle")
 
 df['event_si'] = df['event_si'] * 100
 df['event_area'] = df['event_area'] * 10
 df.reset_index(inplace=True, drop=True)
 
-# df['event_si'].describe()
 si_labels = ['Weak', 'Medium', 'Strong', 'Very Strong']
 df['label_si'] = pd.cut(df['event_si'], bins=[0, 4, 10, 50, 300], labels=si_labels)
 
@@ -105,7 +94,6 @@ app.layout = html.Div([
     # EINZEL / VERGLEICH SLIDER #
     # =============================================================================
 
-    # DIV ROW 2
     html.Div(
         [
             html.Div(
@@ -137,7 +125,7 @@ app.layout = html.Div([
     ),
 
     # =============================================================================
-    # CONTAINER SINGLE START
+    # FILTER
     # =============================================================================
 
     html.Div(
@@ -299,6 +287,15 @@ app.layout = html.Div([
                     className="pretty_container five columns",
                     id="cross-filter-options",
                     style={'backgroundColor': 'white'}
+                ),
+                
+                
+                html.Div(
+                        [dcc.Graph(id="count_year_graph_einzelanalyse")],
+                        className="pretty_container six columns",
+                        id="count_year_graph_div_einzelanalyse",
+                        #style={'backgroundColor': 'white'}
+                        
                 ),
                 
                 
@@ -464,35 +461,79 @@ app.layout = html.Div([
             # Plots
             # =============================================================================
             
-            # DIV ROW 1
+            # (Einzelanalyse) DIV ROW 1
             html.Div(
                 children=[
                 
                     html.Div(
-                        [dcc.Graph(id="count_year_graph")],
+                        [dcc.Graph(id="map_einzelanalyse")],
+                        id="map_div_einzelanalyse",
+                        className="pretty_container six columns",
+                        #style={'backgroundColor': 'white'}
+                    ),
+                    
+                    html.Div(
+                        [dcc.Graph(id="map_events_graph_einzelanalyse")],
+                        id="map_events_graph_div_einzelanalyse",
+                        className="pretty_container six columns",
+                        #style={'backgroundColor': 'white'}
+                    ),
+                
+                ],
+                className="row flex-display",
+                id="map_and_map_events_einzelanalyse"
+            ),
+            
+            # (Vergleichanalyse) DIV ROW 1
+            html.Div(
+                children=[
+                
+                    html.Div(
+                        [dcc.Graph(id="count_year_graph_1")],
                         className="pretty_container six columns",
                         id="count_year_graph_div_1",
-                        #style={'backgroundColor': 'white'}
-                        
+                        #style={'backgroundColor': 'white'}, 
                     ),
                     
                     html.Div(
                         [dcc.Graph(id="count_year_graph_2")],
                         className="pretty_container six columns",
                         id="count_year_graph_div_2",
-                        style={'display': 'none'} #'backgroundColor': 'white', 
+                        #style={'backgroundColor': 'white'}, 
                     )
                     
                 ],
-                className="row flex-display",
+                className="row flex-display"
             ),
             
-            # DIV ROW 2
+            # (Einzelanalyse) DIV ROW 2
             html.Div(
                 children=[
                 
                     html.Div(
-                        [dcc.Graph(id="map")],
+                        [dcc.Graph(id="si_pie_graph_einzelanalyse")],
+                        id="si_pie_graph_div_einzelanalyse",
+                        className="pretty_container six columns",
+                        #style={'backgroundColor': 'white'}
+                    ),
+                    
+                    html.Div(
+                        [dcc.Graph(id="plots_boxplot_einzelanalyse")],
+                        id="plots_boxplot_div_einzelanalyse",
+                        className="pretty_container six columns",
+                        #style={'backgroundColor': 'white'}
+                    ),
+                
+                ],
+                className="row flex-display",
+            ),
+            
+            # (Vergleichanalyse) DIV ROW 2
+            html.Div(
+                children=[
+                
+                    html.Div(
+                        [dcc.Graph(id="map_1")],
                         id="map_div_1",
                         className="pretty_container six columns",
                         #style={'backgroundColor': 'white'}
@@ -502,19 +543,19 @@ app.layout = html.Div([
                         [dcc.Graph(id="map_2")],
                         id="map_div_2",
                         className="pretty_container six columns",
-                        style={'display': 'none'} #'backgroundColor': 'white', 
+                        #style={'backgroundColor': 'white'}
                     )
                 
                 ],
                 className="row flex-display",
             ),
             
-            # DIV ROW 3
+            # (Vergleichanalyse) DIV ROW 3
             html.Div(
                 children=[
                 
                     html.Div(
-                        [dcc.Graph(id="map_events_graph")],
+                        [dcc.Graph(id="map_events_graph_1")],
                         id="map_events_graph_div_1",
                         className="pretty_container six columns",
                         #style={'backgroundColor': 'white'}
@@ -524,19 +565,19 @@ app.layout = html.Div([
                         [dcc.Graph(id="map_events_graph_2")],
                         id="map_events_graph_div_2",
                         className="pretty_container six columns",
-                        style={'display': 'none'} #'backgroundColor': 'white', 
+                        #style={'backgroundColor': 'white'}
                     )
                 
                 ],
                 className="row flex-display",
             ),
             
-            # DIV ROW 4
+            # (Vergleichanalyse) DIV ROW 4
             html.Div(
                 children=[
                 
                     html.Div(
-                        [dcc.Graph(id="si_pie_graph")],
+                        [dcc.Graph(id="si_pie_graph_1")],
                         id="si_pie_graph_div_1",
                         className="pretty_container six columns",
                         #style={'backgroundColor': 'white'}
@@ -546,19 +587,19 @@ app.layout = html.Div([
                         [dcc.Graph(id="si_pie_graph_2")],
                         id="si_pie_graph_div_2",
                         className="pretty_container six columns",
-                        style={'display': 'none'} #'backgroundColor': 'white', 
+                        #style={'backgroundColor': 'white'}
                     )
                 
                 ],
                 className="row flex-display",
             ),
             
-            # DIV ROW 5
+            # (Vergleichanalyse) DIV ROW 5
             html.Div(
                 children=[
                 
                     html.Div(
-                        [dcc.Graph(id="plots_boxplot")],
+                        [dcc.Graph(id="plots_boxplot_1")],
                         id="plots_boxplot_div_1",
                         className="pretty_container six columns",
                         #style={'backgroundColor': 'white'}
@@ -568,14 +609,14 @@ app.layout = html.Div([
                         [dcc.Graph(id="plots_boxplot_2")],
                         id="plots_boxplot_div_2",
                         className="pretty_container six columns",
-                        style={'display': 'none'} #'backgroundColor': 'white', 
+                        #style={'backgroundColor': 'white'}
                     )
                 
                 ],
                 className="row flex-display",
             ),
 
-            # DIV ROW 6
+            # (Einzel & Vergleichanalyse) DIV ROW 6
             html.Div(
                 children=[
                 
@@ -583,7 +624,7 @@ app.layout = html.Div([
                         html.Div(
                             [
                                 dcc.Dropdown(
-                                    id='input_multi_graph_overTime',
+                                    id='input_multi_graph_overTime_1',
                                     options=[
                                         {'label': 'Duration over time', 'value': 'event_length'},
                                         {'label': 'Severity over time', 'value': 'event_si'},
@@ -597,7 +638,7 @@ app.layout = html.Div([
                         ),
 
                         html.Div(
-                            [dcc.Graph(id="multi_graph")],
+                            [dcc.Graph(id="multi_graph_1")],
                         ),
                         
                         ],
@@ -630,21 +671,21 @@ app.layout = html.Div([
                         ],
                         id="input_multi_graph_overTime_div_2",
                         className="pretty_container six columns",
-                        style={'display': 'none'} #'backgroundColor': 'white', 
+                        #style={'backgroundColor': 'white'}
                     )
                     
                 ],
                 className="row flex-display",
             ),
 
-            # DIV ROW 7
+            # (Einzel & Vergleichanalyse) DIV ROW 7
             html.Div(
                 children=[
             
                     html.Div(
                         [
                             dcc.Dropdown(
-                                id='input_multi_graph_events',
+                                id='input_multi_graph_events_1',
                                 options=[
                                     {'label': 'Events average per Month', 'value': 'events_per_month'},
                                     {'label': 'Events average per Year', 'value': 'events_per_year'}
@@ -653,7 +694,7 @@ app.layout = html.Div([
                                 searchable=False
                             ),
                             html.Div(
-                                [dcc.Graph(id="output_multi_graph_events")],
+                                [dcc.Graph(id="output_multi_graph_events_1")],
                                 className="twelve columns",
                                 #style={'backgroundColor': 'white'}
                             ),
@@ -682,7 +723,7 @@ app.layout = html.Div([
                         ],
                         id="multi_graph_events_div_2",
                         className="pretty_container six columns",
-                        style={'display': 'none'} #'backgroundColor': 'white', 
+                        #style={'backgroundColor': 'white'} 
                     )
 
                 ],
@@ -825,12 +866,26 @@ def update_filter_hours(hours_slider):
 # =============================================================================
 @app.callback(
     [
-        Output('cross-filter-options', 'className'), Output('cross-filter-options_2', 'style'),
-        Output('count_year_graph_div_1', 'className'), Output('count_year_graph_div_2', 'style'),
-        Output('map_div_1', 'className'), Output('map_div_2', 'style'),
-        Output('map_events_graph_div_1', 'className'), Output('map_events_graph_div_2', 'style'),
-        Output('si_pie_graph_div_1', 'className'), Output('si_pie_graph_div_2', 'style'),
-        Output('plots_boxplot_div_1', 'className'), Output('plots_boxplot_div_2', 'style'),
+        Output('cross-filter-options', 'className'), 
+        Output('cross-filter-options_2', 'style'),
+        
+        Output('count_year_graph_div_einzelanalyse', 'style'),
+        Output('count_year_graph_div_1', 'className'), Output('count_year_graph_div_1', 'style'), 
+        Output('count_year_graph_div_2', 'className'), Output('count_year_graph_div_2', 'style'),
+        
+        Output('map_div_einzelanalyse', 'style'), Output('map_events_graph_div_einzelanalyse', 'style'),
+        Output('map_div_1', 'className'), Output('map_div_1', 'style'),
+        Output('map_div_2', 'className'), Output('map_div_2', 'style'),
+        
+        Output('map_events_graph_div_1', 'className'), Output('map_events_graph_div_1', 'style'),
+        Output('map_events_graph_div_2', 'className'), Output('map_events_graph_div_2', 'style'),
+        
+        Output('si_pie_graph_div_1', 'className'), Output('si_pie_graph_div_1', 'style'),
+        Output('si_pie_graph_div_2', 'className'), Output('si_pie_graph_div_2', 'style'),
+        
+        Output('plots_boxplot_div_1', 'className'), Output('plots_boxplot_div_1', 'style'),
+        Output('plots_boxplot_div_2', 'className'), Output('plots_boxplot_div_2', 'style'),
+        
         Output('input_multi_graph_overTime_div_1', 'className'), Output('input_multi_graph_overTime_div_2', 'style'),
         Output('multi_graph_events_div_1', 'className'), Output('multi_graph_events_div_2', 'style'),
     ],
@@ -839,33 +894,55 @@ def show_rules(my_input):
     if my_input:
         # rule for Verlgleichsanalyse
         return [
-                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
-                    "pretty_container six columns", {'display': 'block'},#, 'backgroundColor': 'white'},
+                    "pretty_container six columns", 
+                    {'display': 'block'},
+                    
+                    {'display': 'none'}, 
+                    "pretty_container six columns", {'display': 'block'}, 
+                    "pretty_container six columns", {'display': 'block'},
+                    
+                    {'display': 'none'}, {'display': 'none'},
+                    "pretty_container six columns", {'display': 'block'}, 
+                    "pretty_container six columns", {'display': 'block'},
+                    
+                    "pretty_container six columns", {'display': 'block'},
+                    "pretty_container six columns", {'display': 'block'},
+                    
+                    "pretty_container six columns", {'display': 'block'},
+                    "pretty_container six columns", {'display': 'block'},
+                    
+                    "pretty_container six columns", {'display': 'block'},
+                    "pretty_container six columns", {'display': 'block'},
+                    
+                    "pretty_container six columns", {'display': 'block'},
+                    "pretty_container six columns", {'display': 'block'},
                 ]
     
     # rule for Einzelanalyse
     return [
-                "pretty_container twelve columns", {'display': 'none'},
-                "pretty_container twelve columns", {'display': 'none'},
-                "pretty_container twelve columns", {'display': 'none'},
-                "pretty_container twelve columns", {'display': 'none'},
-                "pretty_container twelve columns", {'display': 'none'},
-                "pretty_container twelve columns", {'display': 'none'},
+                "pretty_container six columns", 
+                {'display': 'none'},
+                
+                {'display': 'block'},
+                "pretty_container six columns", {'display': 'none'}, 
+                "pretty_container six columns", {'display': 'none'},
+                
+                {'display': 'block'}, {'display': 'block'},
+                "pretty_container six columns", {'display': 'none'}, 
+                "pretty_container six columns", {'display': 'none'},
+                
+                "pretty_container six columns", {'display': 'none'},
+                "pretty_container six columns", {'display': 'none'},
+                
+                "pretty_container six columns", {'display': 'none'},
+                "pretty_container six columns", {'display': 'none'},
+                
+                "pretty_container six columns", {'display': 'none'},
+                "pretty_container six columns", {'display': 'none'},
+                
                 "pretty_container twelve columns", {'display': 'none'},
                 "pretty_container twelve columns", {'display': 'none'},
             ]
-
-
-
-
-
-
 
 
 
@@ -877,9 +954,8 @@ def show_rules(my_input):
 def getFigure_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items):
     return data_builder.get_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, False, interval_radio_items)
 
-
 @app.callback(
-    Output(component_id='count_year_graph', component_property='figure'),
+    Output(component_id='count_year_graph_einzelanalyse', component_property='figure'),
     [Input("year_slider", "value"),
      Input("month_slider", "value"),
      Input("si_slider", "value"),
@@ -892,7 +968,23 @@ def plot_events_per_year(year_range, month_range, si_range, area_range, map_size
                          country_list, interval_radio_items):
     return getFigure_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
 
+# Vergleichanalyse-1
+@app.callback(
+    Output(component_id='count_year_graph_1', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value"),
+     Input("interval_radio_items", "value")])
+def plot_events_per_year_1(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
+                         country_list, interval_radio_items):
+    return getFigure_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
 
+
+# Vergleichanalyse-2
 @app.callback(
     Output(component_id='count_year_graph_2', component_property='figure'),
     [Input("year_slider_2", "value"),
@@ -939,8 +1031,9 @@ def getFigure_scatter_mapbox(year_range, month_range, si_range, area_range, map_
 
     return fig
 
+# Einzelanalyse
 @app.callback(
-    Output(component_id='map', component_property='figure'),
+    Output(component_id='map_einzelanalyse', component_property='figure'),
     [Input("year_slider", "value"),
      Input("month_slider", "value"),
      Input("si_slider", "value"),
@@ -951,7 +1044,20 @@ def getFigure_scatter_mapbox(year_range, month_range, si_range, area_range, map_
 def plot_scatter_mapbox(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
     return getFigure_scatter_mapbox(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
+# Vergleichanalyse-1
+@app.callback(
+    Output(component_id='map_1', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_scatter_mapbox_1(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    return getFigure_scatter_mapbox(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
+# Vergleichanalyse-2
 @app.callback(
     Output(component_id='map_2', component_property='figure'),
     [Input("year_slider_2", "value"),
@@ -1008,11 +1114,17 @@ def getFigure_map_events_graph(map_events_graph):
     figure = dict(data=data, layout=layout_individual)
     return figure
 
-@app.callback(Output("map_events_graph", "figure"), [Input("map", "hoverData")])
+# Einzelanalyse
+@app.callback(Output("map_events_graph_einzelanalyse", "figure"), [Input("map_einzelanalyse", "hoverData")])
 def plot_map_events_graph(map_events_graph):
     return getFigure_map_events_graph(map_events_graph)
 
+# Vergleichanalyse 1
+@app.callback(Output("map_events_graph_1", "figure"), [Input("map_1", "hoverData")])
+def plot_map_events_graph_1(map_events_graph):
+    return getFigure_map_events_graph(map_events_graph)
 
+# Vergleichanalyse 2
 @app.callback(Output("map_events_graph_2", "figure"), [Input("map_2", "hoverData")])
 def plot_map_events_graph_2(map_events_graph):
     return getFigure_map_events_graph(map_events_graph)
@@ -1026,9 +1138,9 @@ def getFigure_pie_graph(year_range, month_range, si_range, area_range, map_size_
     figure = plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
     return figure
 
-
+# Einzelanalyse
 @app.callback(
-    Output(component_id='si_pie_graph', component_property='figure'),
+    Output(component_id='si_pie_graph_einzelanalyse', component_property='figure'),
     [Input("year_slider", "value"),
      Input("month_slider", "value"),
      Input("si_slider", "value"),
@@ -1039,7 +1151,20 @@ def getFigure_pie_graph(year_range, month_range, si_range, area_range, map_size_
 def plot_pie_graph(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
     return getFigure_pie_graph(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
+# Vergleichanalyse-1
+@app.callback(
+    Output(component_id='si_pie_graph_1', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_pie_graph_1(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    return getFigure_pie_graph(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
+# Vergleichanalyse-2
 @app.callback(
     Output(component_id='si_pie_graph_2', component_property='figure'),
     [Input("year_slider_2", "value"),
@@ -1093,9 +1218,9 @@ def getFigure_boxplots(year_range, month_range, si_range, area_range, map_size_r
     fig.update_layout(title="Dispertion of Attributes",legend=dict(orientation="h"))
     return fig
 
-
+# Einzelanalyse
 @app.callback(
-    Output(component_id='plots_boxplot', component_property='figure'),
+    Output(component_id='plots_boxplot_einzelanalyse', component_property='figure'),
     [Input("year_slider", "value"),
      Input("month_slider", "value"),
      Input("si_slider", "value"),
@@ -1106,7 +1231,20 @@ def getFigure_boxplots(year_range, month_range, si_range, area_range, map_size_r
 def plot_boxplots(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
     return getFigure_boxplots(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
+# Vergleichanalyse-1
+@app.callback(
+    Output(component_id='plots_boxplot_1', component_property='figure'),
+    [Input("year_slider", "value"),
+     Input("month_slider", "value"),
+     Input("si_slider", "value"),
+     Input("area_slider", "value"),
+     Input("map_size_radio_items", "value"),
+     Input("hours_slider", "value"),
+     Input("country_selector", "value")])
+def plot_boxplots_1(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    return getFigure_boxplots(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
 
+# Vergleichanalyse-2
 @app.callback(
     Output(component_id='plots_boxplot_2', component_property='figure'),
     [Input("year_slider_2", "value"),
@@ -1147,8 +1285,8 @@ def getFigure_duration(current_figure, year_range, month_range, si_range, area_r
 
 
 @app.callback(
-    Output(component_id='multi_graph', component_property='figure'),
-    [Input("input_multi_graph_overTime", "value"),
+    Output(component_id='multi_graph_1', component_property='figure'),
+    [Input("input_multi_graph_overTime_1", "value"),
      Input("year_slider", "value"),
      Input("month_slider", "value"),
      Input("si_slider", "value"),
@@ -1157,7 +1295,7 @@ def getFigure_duration(current_figure, year_range, month_range, si_range, area_r
      Input("hours_slider", "value"),
      Input("country_selector", "value"),
      Input("interval_radio_items", "value")])
-def plot_duration(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items):
+def plot_duration_1(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items):
     return getFigure_duration(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
 
 
@@ -1194,8 +1332,8 @@ def getFigure_events_per_year_or_month(current_figure, year_range, month_range, 
 
 
 @app.callback(
-    Output(component_id='output_multi_graph_events', component_property='figure'),
-    [Input("input_multi_graph_events", "value"),
+    Output(component_id='output_multi_graph_events_1', component_property='figure'),
+    [Input("input_multi_graph_events_1", "value"),
      Input("year_slider", "value"),
      Input("month_slider", "value"),
      Input("si_slider", "value"),
@@ -1204,7 +1342,7 @@ def getFigure_events_per_year_or_month(current_figure, year_range, month_range, 
      Input("hours_slider", "value"),
      Input("country_selector", "value"),
      Input("interval_radio_items", "value")])
-def plot_events_per_year_or_month(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items):
+def plot_events_per_year_or_month_1(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items):
     return getFigure_events_per_year_or_month(current_figure, year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
 
 
