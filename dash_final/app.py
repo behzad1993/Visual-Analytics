@@ -874,6 +874,9 @@ def update_filter_hours(hours_slider):
         Output('count_year_graph_div_1', 'className'), Output('count_year_graph_div_1', 'style'), 
         Output('count_year_graph_div_2', 'className'), Output('count_year_graph_div_2', 'style'),
         
+        Output('si_pie_graph_div_einzelanalyse', 'className'), Output('si_pie_graph_div_einzelanalyse', 'style'),
+        Output('plots_boxplot_div_einzelanalyse', 'className'), Output('plots_boxplot_div_einzelanalyse', 'style'),
+        
         Output('map_div_einzelanalyse', 'style'), Output('map_events_graph_div_einzelanalyse', 'style'),
         Output('map_div_1', 'className'), Output('map_div_1', 'style'),
         Output('map_div_2', 'className'), Output('map_div_2', 'style'),
@@ -902,6 +905,9 @@ def show_rules(my_input):
                     "pretty_container six columns", {'display': 'block'}, 
                     "pretty_container six columns", {'display': 'block'},
                     
+                    "pretty_container six columns", {'display': 'none'}, 
+                    "pretty_container six columns", {'display': 'none'},
+                    
                     {'display': 'none'}, {'display': 'none'},
                     "pretty_container six columns", {'display': 'block'}, 
                     "pretty_container six columns", {'display': 'block'},
@@ -927,6 +933,9 @@ def show_rules(my_input):
                 {'display': 'block'},
                 "pretty_container six columns", {'display': 'none'}, 
                 "pretty_container six columns", {'display': 'none'},
+                
+                "pretty_container six columns", {'display': 'block'},
+                "pretty_container six columns", {'display': 'block'},
                 
                 {'display': 'block'}, {'display': 'block'},
                 "pretty_container six columns", {'display': 'none'}, 
