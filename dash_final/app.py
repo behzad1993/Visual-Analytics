@@ -31,7 +31,9 @@ from plotly.subplots import make_subplots
 import warnings; warnings.simplefilter('ignore')
 
 #color_set = ['#e8a531','#cbabff','#fcc168','#003366','#88ccee','#b5e66c','#0f5dab'] #'#f08686''#72d499',
-color_set = ['#e8a531','#004080','#7f3c99','#e6dd20','#88ccee','#b5e66c','#0f5dab']
+#color_set = ['#e8a531','#004080','#7f3c99','#e6dd20','#88ccee','#b5e66c','#0f5dab']
+color_set = ['#e8a531','#004080','#7f3c99','#b0341e','#88ccee','#097061','#0f5dab']
+papercolor = "#e4ebf2"
 # =============================================================================
 # Settinga & Data
 # =============================================================================
@@ -781,7 +783,7 @@ def plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items
     )
     #layout_pie["font"] = dict(color="#777777")
     layout_pie["legend"] = dict(
-        font=dict(size="12"), orientation="h"
+        font=dict(size="12"), orientation="h",y=-0.25
     )
     #layout_pie["plot_bgcolor"] = '#FFFFFF'
     #layout_pie["paper_bgcolor"] = '#FFFFFF'
@@ -799,9 +801,9 @@ layout = dict(
     #automargin=True,
     #margin=dict(l=30, r=30, b=20, t=40),
     hovermode="closest",
-    plot_bgcolor="#e4ebf2",
-    paper_bgcolor="#e4ebf2",
-    legend=dict(font=dict(size=12), orientation="h"),
+    plot_bgcolor=papercolor,
+    paper_bgcolor=papercolor,
+    legend=dict(font=dict(size=12), orientation="h",y=0.25),
     #title="Satellite Overview",
     mapbox=dict(
         accesstoken=mapbox_token,
@@ -1035,8 +1037,9 @@ def getFigure_scatter_mapbox(year_range, month_range, si_range, area_range, map_
     fig.update_layout(
         autosize=True,
         margin=dict(l=0, r=0, b=0, t=0),
-        legend=dict(font=dict(size=10), orientation="h"),
-        mapbox=dict(style="light")
+        legend=dict(font=dict(size=10), orientation="h",y=-0.25),
+        mapbox=dict(style="light"),
+        paper_bgcolor=papercolor
     )
 
     return fig
@@ -1117,9 +1120,7 @@ def getFigure_map_events_graph(map_events_graph):
         ),
     ]
     layout_individual["title"] = str('Event ' + str(event_id) + ' (map hover)')
-    #layout_individual["plot_bgcolor"] = '#FFFFFF'
-    #layout_individual["paper_bgcolor"] = '#FFFFFF'
-    layout_individual["legend"] = dict(font=dict(size="12"), orientation="h")
+    layout_individual["legend"] = dict(font=dict(size="12"), orientation="h",y=-0.25)
     
     figure = dict(data=data, layout=layout_individual)
     return figure
@@ -1198,34 +1199,13 @@ def getFigure_boxplots(year_range, month_range, si_range, area_range, map_size_r
     # TODO CODE
     # Histogram with all outliers combined as e.g. >30 hours
 
-    # return figure
-
-    # from sklearn.preprocessing import MinMaxScaler
-    # import plotly.graph_objects as go
-
-    # scaler = MinMaxScaler()
-    # min_max_scaler = MinMaxScaler()
-    # scaled = tmp.copy()
-    # scaled[['event_si', 'event_area', 'event_pre', 'event_length']] = min_max_scaler.fit_transform(
-    #     scaled[['event_si', 'event_area', 'event_pre', 'event_length']])  # event_area instead of area used!
-
-    # scaled['event_si'] = scaled['event_si'].round(decimals=3)
-    # scaled['event_area'] = scaled['event_area'].round(decimals=3)
-    # scaled['event_pre'] = scaled['event_pre'].round(decimals=3)
-    # scaled['event_length'] = scaled['event_length'].round(decimals=3)
-
-    # fig = go.Figure()
-    # fig.add_trace(go.Box(y=scaled.event_si, name="Severity"))
-    # fig.add_trace(go.Box(y=scaled.event_area, name="Area"))
-    # fig.add_trace(go.Box(y=scaled.event_pre, name="Precipitation"))
-    # fig.add_trace(go.Box(y=scaled.event_length, name="Duration"))
-    
+    # return figure  
     fig = make_subplots(rows=1,cols=4)
     fig.append_trace(go.Box(y=tmp.event_si, name="Severity",marker=dict(color=color_set[0])),row=1,col=1)
     fig.append_trace(go.Box(y=tmp.event_area, name="Area",marker=dict(color=color_set[1])),row=1,col=2)
     fig.append_trace(go.Box(y=tmp.event_pre, name="Precipitation",marker=dict(color=color_set[2])),row=1,col=3)
-    fig.append_trace(go.Box(y=tmp.event_length, name="Duration",marker=dict(color=color_set[4])),row=1,col=4)
-    fig.update_layout(title="Dispertion of Attributes",legend=dict(orientation="h"))
+    fig.append_trace(go.Box(y=tmp.event_length, name="Duration",marker=dict(color=color_set[3])),row=1,col=4)
+    fig.update_layout(title="Dispertion of Attributes",legend=dict(orientation="h",y=-0.25),paper_bgcolor=papercolor)
     return fig
 
 # Einzelanalyse

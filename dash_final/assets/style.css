@@ -68,7 +68,7 @@
   background: none;
 }
 rect .bg{
-
+ margin: 30px;
 }
 /* Filter sliders */
 .rc-slider-track {
@@ -94,8 +94,12 @@ rect .bg{
     position: relative;
     box-shadow: 2px 2px 2px lightgrey;
 }
+.Select div{
+    background-color: var(--frame);
+}
 html{
     background-color: var(--bgcolor);
+    padding-bottom: 70px;
 }
 h1,h3, .switch_label{
   color: var(--headercolor);
@@ -103,7 +107,7 @@ h1,h3, .switch_label{
 #react-entry-point{
   background-color: var(--bgcolor);
 }
-@media only screen and (min-width: 1000px) {
+@media only screen and (min-width: 1200px) {
   #mainContainer{
     padding-left: 10%;
     padding-right: 10%;

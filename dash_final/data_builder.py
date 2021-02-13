@@ -207,7 +207,7 @@ def get_cluster(filtered_df, event_property, interval_radio_items):
 
 def plot_property_per_time_scale(plot1, plot2, plot3, x_title, y_title, table_title, scale):
     #color_set = ['#72d499','#cbabff','#fcc168','#f08686','#88ccee','#b5e66c','#d41313']
-    color_set = ['#e8a531','#004080','#7f3c99','#88ccee','#b0341e','#097061','#0f5dab']
+    color_set = ['#e8a531','#004080','#7f3c99','#b0341e','#88ccee','#097061','#0f5dab']
     if plot1.stacked is None:
         figure = make_subplots(specs=[[{"secondary_y": True}]])
         figure.add_bar(x=plot1.x, y=plot1.y, name=plot1.name, marker_color=color_set[1])
@@ -219,7 +219,7 @@ def plot_property_per_time_scale(plot1, plot2, plot3, x_title, y_title, table_ti
             go.Scatter(x=plot2.x, y=plot2.y, name=plot2.name, mode='lines', marker_color=color_set[0]))
 
     if plot3 is not None:
-        figure.add_trace(go.Scatter(x=plot3.x, y=plot3.y, name=plot3.name, marker_color=color_set[4]))
+        figure.add_trace(go.Scatter(x=plot3.x, y=plot3.y, name=plot3.name, marker_color=color_set[2]))
 
     figure.update_xaxes(title_text=x_title)
     figure.update_yaxes(title_text=y_title)
@@ -239,7 +239,7 @@ def get_layout(figure, title, scale):
         hovermode="x",
         hoverdistance=100,  # Distance to show hover label of data point
         spikedistance=1000,
-        legend=dict(font=dict(size=12), orientation="h"),
+        legend=dict(font=dict(size=12), orientation="h",y=-0.25),
 
         # Distance to show spike
         xaxis=dict(
