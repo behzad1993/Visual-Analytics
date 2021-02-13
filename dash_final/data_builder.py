@@ -78,9 +78,9 @@ def get_events_per_year(year_range, month_range, si_range, area_range, map_size_
         events_per_year_country.country[~events_per_year_country.country.isin(['DE', 'CZ', 'IT', 'INT', 'TN'])] = 'other'
         plot1 = Plot(events_per_year_country.event_year, events_per_year_country.event_id, 'Per year',
                      events_per_year_country.country)
-        plot3 = Plot(events_per_cluster.year_cluster, events_per_cluster.avg_per_cluster, 'avg per cluster')
+        plot3 = Plot(events_per_cluster.year_cluster, events_per_cluster.avg_per_cluster, 'avg per interval')
     else:
-        plot1 = Plot(events_per_cluster.year_cluster, events_per_cluster.avg_per_cluster, 'avg per cluster')
+        plot1 = Plot(events_per_cluster.year_cluster, events_per_cluster.avg_per_cluster, 'avg per interval')
         plot3 = None
 
     plot2 = Plot(df_avg.index, df_avg.avg, 'Overall average')
@@ -206,19 +206,20 @@ def get_cluster(filtered_df, event_property, interval_radio_items):
 
 
 def plot_property_per_time_scale(plot1, plot2, plot3, x_title, y_title, table_title, scale):
+    #color_set = ['#72d499','#cbabff','#fcc168','#f08686','#88ccee','#b5e66c','#d41313']
+    color_set = ['#e8a531','#004080','#7f3c99','#88ccee','#b0341e','#097061','#0f5dab']
     if plot1.stacked is None:
         figure = make_subplots(specs=[[{"secondary_y": True}]])
-        figure.add_bar(x=plot1.x, y=plot1.y, name=plot1.name, marker_color='rgba(123,199,255, 0.8)')
+        figure.add_bar(x=plot1.x, y=plot1.y, name=plot1.name, marker_color=color_set[1])
     else:
-        color_set = ['#72d499','#cbabff','#fcc168','#f08686','#88ccee','#b5e66c']
         figure = px.bar(x=plot1.x, y=plot1.y, title=plot1.name, color=plot1.stacked, color_discrete_sequence=color_set)
 
     if plot2 is not None:
         figure.add_trace(
-            go.Scatter(x=plot2.x, y=plot2.y, name=plot2.name, mode='lines', marker_color='rgba(255, 77, 77, 0.8)'))
+            go.Scatter(x=plot2.x, y=plot2.y, name=plot2.name, mode='lines', marker_color=color_set[0]))
 
     if plot3 is not None:
-        figure.add_trace(go.Scatter(x=plot3.x, y=plot3.y, name=plot3.name, marker_color='rgba(0, 158, 0, 0.8)'))
+        figure.add_trace(go.Scatter(x=plot3.x, y=plot3.y, name=plot3.name, marker_color=color_set[4]))
 
     figure.update_xaxes(title_text=x_title)
     figure.update_yaxes(title_text=y_title)
@@ -228,9 +229,13 @@ def plot_property_per_time_scale(plot1, plot2, plot3, x_title, y_title, table_ti
 
 def get_layout(figure, title, scale):
     figure.update_layout(
+        #autosize=True,
+        #automargin=True,
+        #margin=dict(l=30, r=30, b=20, t=40),
+        plot_bgcolor="#e4ebf2",
+        paper_bgcolor="#e4ebf2",
         title_text=title,
         yaxis_type=scale,
-        autosize=True,
         hovermode="x",
         hoverdistance=100,  # Distance to show hover label of data point
         spikedistance=1000,

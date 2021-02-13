@@ -17,14 +17,14 @@
 
 */
 
-/* PLotly.js 
+/* PLotly.js
 –––––––––––––––––––––––––––––––––––––––––––––––– */
 /* plotly.js's modebar's z-index is 1001 by default
  * https://github.com/plotly/plotly.js/blob/7e4d8ab164258f6bd48be56589dacd9bdd7fded2/src/css/_modebar.scss#L5
  * In case a dropdown is above the graph, the dropdown's options
  * will be rendered below the modebar
  * Increase the select option's z-index
- 
+
  */
 
 /* This was actually not quite right -
@@ -572,35 +572,6 @@ there.
   .container-display {
     display: flex;
   }
-  #wells,
-  #gas,
-  #oil {
-    margin-right: 10px;
-  }
-
-  #wells {
-    margin-left: 0px;
-  }
-  #water {
-    margin-right: 0px;
-  }
-  .mini_container {
-    margin-bottom: 25px !important;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    padding: 15px;
-    position: relative;
-    box-shadow: 2px 2px 2px lightgrey;
-  }
-  #plotly-image {
-    margin-bottom: 0px !important;
-    height: 45px !important;
-  }
-  #learn-more-button {
-    margin-top: 0px !important;
-    padding: 0 10px !important;
-    font-size: 12px !important;
-  }
   #button {
     display: flex;
     justify-content: center;
@@ -620,12 +591,4 @@ there.
   p {
     font-size: 11px;
   }
-}
-
-/* Larger than desktop */
-@media (min-width: 1000px) {
-}
-
-/* Larger than Desktop HD */
-@media (min-width: 1200px) {
 }

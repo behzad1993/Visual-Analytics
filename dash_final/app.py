@@ -30,7 +30,8 @@ from plotly.subplots import make_subplots
 
 import warnings; warnings.simplefilter('ignore')
 
-color_set = ['#72d499','#cbabff','#fcc168','#f08686','#88ccee','#b5e66c']
+#color_set = ['#e8a531','#cbabff','#fcc168','#003366','#88ccee','#b5e66c','#0f5dab'] #'#f08686''#72d499',
+color_set = ['#e8a531','#004080','#7f3c99','#e6dd20','#88ccee','#b5e66c','#0f5dab']
 # =============================================================================
 # Settinga & Data
 # =============================================================================
@@ -98,7 +99,7 @@ app.layout = html.Div([
         [
             html.Div(
                 html.Label("Individual analysis"),
-                className="five columns",
+                className="five columns switch_label",
                 style={'textAlign': 'right','font-size':'20px'}
             ),
             html.Div(
@@ -116,7 +117,7 @@ app.layout = html.Div([
 
             html.Div(
                 html.Label("Comparative analysis"),
-                className="five columns",
+                className="five columns switch_label",
                 style={'textAlign': 'left','font-size':'20px'}
             ),
 
@@ -286,7 +287,7 @@ app.layout = html.Div([
                 ],
                     className="pretty_container five columns",
                     id="cross-filter-options",
-                    style={'backgroundColor': 'white'}
+                    #style={'backgroundColor': 'white'}
                 ),
                 
                 
@@ -794,18 +795,18 @@ def plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items
 
 
 layout = dict(
-    autosize=True,
-    automargin=True,
-    margin=dict(l=30, r=30, b=20, t=40),
+    #autosize=True,
+    #automargin=True,
+    #margin=dict(l=30, r=30, b=20, t=40),
     hovermode="closest",
-    #plot_bgcolor="#F9F9F9",
-    #paper_bgcolor="#F9F9F9",
-    legend=dict(font=dict(size=10), orientation="h"),
+    plot_bgcolor="#e4ebf2",
+    paper_bgcolor="#e4ebf2",
+    legend=dict(font=dict(size=12), orientation="h"),
     #title="Satellite Overview",
     mapbox=dict(
         accesstoken=mapbox_token,
         style="light",
-        center=dict(lon=-78.05, lat=42.54),
+        #center=dict(lon=-78.05, lat=42.54),
         zoom=7,
     ),
 )
@@ -1019,7 +1020,7 @@ def getFigure_scatter_mapbox(year_range, month_range, si_range, area_range, map_
                             text='event_id',
                             size="area", size_max=20,
                             zoom=3,
-                            color_continuous_scale=px.colors.sequential.Purp)
+                            color_continuous_scale=px.colors.sequential.Blues)
 
     fig.update_traces(mode='markers', selector=dict(type='scattermapbox'))
     fig.update_layout(
@@ -1214,7 +1215,7 @@ def getFigure_boxplots(year_range, month_range, si_range, area_range, map_size_r
     fig.append_trace(go.Box(y=tmp.event_si, name="Severity",marker=dict(color=color_set[0])),row=1,col=1)
     fig.append_trace(go.Box(y=tmp.event_area, name="Area",marker=dict(color=color_set[1])),row=1,col=2)
     fig.append_trace(go.Box(y=tmp.event_pre, name="Precipitation",marker=dict(color=color_set[2])),row=1,col=3)
-    fig.append_trace(go.Box(y=tmp.event_length, name="Duration",marker=dict(color=color_set[3])),row=1,col=4)
+    fig.append_trace(go.Box(y=tmp.event_length, name="Duration",marker=dict(color=color_set[4])),row=1,col=4)
     fig.update_layout(title="Dispertion of Attributes",legend=dict(orientation="h"))
     return fig
 
