@@ -24,9 +24,11 @@
   font-size: 13px;
   padding: 0px;
 }
+/* 
 #map_size_radio_items, #interval_radio_items {
   display: grid;
 }
+*\
 .rc-slider-tooltip-inner {
     padding: 1px 0px;
     max-height: 10px;

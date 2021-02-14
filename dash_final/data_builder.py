@@ -79,6 +79,7 @@ def get_events_per_year(year_range, month_range, si_range, area_range, map_size_
         plot1 = Plot(events_per_year_country.event_year, events_per_year_country.event_id, 'Per year',
                      events_per_year_country.country)
         plot3 = Plot(events_per_cluster.year_cluster, events_per_cluster.avg_per_cluster, 'avg per interval')
+        
     else:
         plot1 = Plot(events_per_cluster.year_cluster, events_per_cluster.avg_per_cluster, 'avg per interval')
         plot3 = None

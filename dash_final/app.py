@@ -246,7 +246,8 @@ app.layout = html.Div([
                         },
                         included=True
                     ),
-
+                    
+                    
                     # Select color-map-feature radio button
                     html.P("Select variable as color:", className="control_label"),
                     dcc.RadioItems(
@@ -272,10 +273,12 @@ app.layout = html.Div([
                             {'label': '7 years', 'value': 7},
                             {'label': '10 years', 'value': 10}
                         ],
-                        value=5,
+                        value=1,
                         labelStyle={'display': 'inline-block'}
                     ), html.Div(id='output_interval_button'),
 
+
+                
                     # Select country
                     html.P("Country", className="control_label"),
                     dcc.Dropdown(
@@ -302,7 +305,7 @@ app.layout = html.Div([
                 ),
                 
                 
-                # Second filter
+                ########## Second filter ###############
                 html.Div([
                     # Filter Year
                     html.Span("Year", className="control_label"),
@@ -433,7 +436,7 @@ app.layout = html.Div([
                             {'label': '7 years', 'value': 7},
                             {'label': '10 years', 'value': 10}
                         ],
-                        value=5,
+                        value=1,
                         labelStyle={'display': 'inline-block'}
                     ), html.Div(id='output_interval_button_2'),
 
@@ -508,29 +511,7 @@ app.layout = html.Div([
                 ],
                 className="row flex-display"
             ),
-            
-            # (Einzelanalyse) DIV ROW 2
-            html.Div(
-                children=[
-                
-                    html.Div(
-                        [dcc.Graph(id="si_pie_graph_einzelanalyse")],
-                        id="si_pie_graph_div_einzelanalyse",
-                        className="pretty_container six columns",
-                        #style={'backgroundColor': 'white'}
-                    ),
-                    
-                    html.Div(
-                        [dcc.Graph(id="plots_boxplot_einzelanalyse")],
-                        id="plots_boxplot_div_einzelanalyse",
-                        className="pretty_container six columns",
-                        #style={'backgroundColor': 'white'}
-                    ),
-                
-                ],
-                className="row flex-display",
-            ),
-            
+
             # (Vergleichanalyse) DIV ROW 2
             html.Div(
                 children=[
@@ -561,15 +542,56 @@ app.layout = html.Div([
                         [dcc.Graph(id="map_events_graph_1")],
                         id="map_events_graph_div_1",
                         className="pretty_container six columns",
-                        #style={'backgroundColor': 'white'}
                     ),
                     
                     html.Div(
                         [dcc.Graph(id="map_events_graph_2")],
                         id="map_events_graph_div_2",
                         className="pretty_container six columns",
-                        #style={'backgroundColor': 'white'}
                     )
+                
+                ],
+                className="row flex-display",
+            ),
+            
+            
+            # (Einzelanalyse & Vergleichanalyse) DIV ROW 3
+            html.Div(
+                children=[
+                
+                    html.Div(
+                        [dcc.Graph(id="map_max_events_graph_1")],
+                        id="map_max_events_graph_div_1",
+                        className="pretty_container six columns",
+                    ),
+                    
+                    html.Div(
+                        [dcc.Graph(id="map_max_events_graph_2")],
+                        id="map_max_events_graph_div_2",
+                        className="pretty_container six columns",
+                    )
+                
+                ],
+                className="row flex-display",
+            ),   
+
+            # (Einzelanalyse) DIV ROW 3
+            html.Div(
+                children=[
+                
+                    html.Div(
+                        [dcc.Graph(id="si_pie_graph_einzelanalyse")],
+                        id="si_pie_graph_div_einzelanalyse",
+                        className="pretty_container six columns",
+                        #style={'backgroundColor': 'white'}
+                    ),
+                    
+                    html.Div(
+                        [dcc.Graph(id="plots_boxplot_einzelanalyse")],
+                        id="plots_boxplot_div_einzelanalyse",
+                        className="pretty_container six columns",
+                        #style={'backgroundColor': 'white'}
+                    ),
                 
                 ],
                 className="row flex-display",
@@ -822,12 +844,39 @@ layout = dict(
 # Callbacks
 # =============================================================================
 
+def update_year_slider_func(count_graph_selected, interval_radio_items):
+    if count_graph_selected is None:
+        return [1979, 2017]
+
+    nums = [int(point["pointNumber"]) for point in count_graph_selected["points"]]
+    return [1979 + (min(nums)*interval_radio_items), 1979 + interval_radio_items + (max(nums)*interval_radio_items)]
+
 
 @app.callback(
     Output("output_year", "children"),
     [Input("year_slider", "value")])
 def update_filter_year(year_slider):
     return str(year_slider)
+
+
+@app.callback(Output("year_slider", "value"), [
+    Input("count_year_graph_einzelanalyse", "selectedData"),
+    Input("interval_radio_items", "value")])
+def update_year_slider(count_graph_selected, interval_radio_items):
+    return update_year_slider_func(count_graph_selected, interval_radio_items)
+
+#@app.callback(Output("year_slider", "value"), [
+#    Input("count_year_graph_1", "selectedData"),
+#    Input("interval_radio_items", "value")])
+#def update_year_slider_2(count_graph_selected, interval_radio_items):
+#    return update_year_slider_func(count_graph_selected, interval_radio_items)
+
+@app.callback(Output("year_slider_2", "value"), [
+    Input("count_year_graph_2", "selectedData"),
+    Input("interval_radio_items", "value")])
+def update_year_slider_2(count_graph_selected, interval_radio_items):
+    return update_year_slider_func(count_graph_selected, interval_radio_items)
+
 
 
 @app.callback(
@@ -886,6 +935,9 @@ def update_filter_hours(hours_slider):
         Output('map_events_graph_div_1', 'className'), Output('map_events_graph_div_1', 'style'),
         Output('map_events_graph_div_2', 'className'), Output('map_events_graph_div_2', 'style'),
         
+        Output('map_max_events_graph_div_1', 'className'), Output('map_max_events_graph_div_1', 'style'),
+        Output('map_max_events_graph_div_2', 'className'), Output('map_max_events_graph_div_2', 'style'),
+        
         Output('si_pie_graph_div_1', 'className'), Output('si_pie_graph_div_1', 'style'),
         Output('si_pie_graph_div_2', 'className'), Output('si_pie_graph_div_2', 'style'),
         
@@ -925,6 +977,9 @@ def show_rules(my_input):
                     
                     "pretty_container six columns", {'display': 'block'},
                     "pretty_container six columns", {'display': 'block'},
+                    
+                    "pretty_container six columns", {'display': 'block'},
+                    "pretty_container six columns", {'display': 'block'},
                 ]
     
     # rule for Einzelanalyse
@@ -946,6 +1001,9 @@ def show_rules(my_input):
                 "pretty_container six columns", {'display': 'none'},
                 "pretty_container six columns", {'display': 'none'},
                 
+                "pretty_container twelve columns", {'display': 'block'},
+                "pretty_container twelve columns", {'display': 'none'},
+                
                 "pretty_container six columns", {'display': 'none'},
                 "pretty_container six columns", {'display': 'none'},
                 
@@ -966,6 +1024,43 @@ def show_rules(my_input):
 def getFigure_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items):
     return data_builder.get_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, False, interval_radio_items)
 
+
+def getEventsYear_Selector(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
+                         country_list, interval_radio_items):
+    
+    layout_count = copy.deepcopy(layout)
+    dff = filter_events([1979, 2017], month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    dff = dff.groupby('event_year')['event_id'].nunique().reset_index()
+    dff_grouped = dff.groupby(dff.index // interval_radio_items).agg({'event_year':min, 'event_id':sum})
+
+    colors = []
+    for i, row in dff_grouped.iterrows():
+        if row['event_year'] >= int(year_range[0]) and row['event_year'] < int(year_range[1]):
+            colors.append(color_set[1])
+        else:
+            colors.append(color_set[4])
+
+    data = [
+        dict(
+            type="bar",
+            x=dff_grouped['event_year'],
+            y=dff_grouped["event_id"],
+            name="Events",
+            marker=dict(color=colors),
+        ),
+    ]
+
+    layout_count["title"] = "Total Rain Events Per Interval"
+    layout_count["dragmode"] = "select"
+    layout_count["showlegend"] = False
+    layout_count["autosize"] = True
+
+    figure = dict(data=data, layout=layout_count)
+    return figure    
+    
+    
+
+
 @app.callback(
     Output(component_id='count_year_graph_einzelanalyse', component_property='figure'),
     [Input("year_slider", "value"),
@@ -978,13 +1073,20 @@ def getFigure_events_per_year(year_range, month_range, si_range, area_range, map
      Input("interval_radio_items", "value")])
 def plot_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                          country_list, interval_radio_items):
-    return getFigure_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
+    
+    return getEventsYear_Selector(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
+                         country_list, interval_radio_items)
+    
+    
+    
+
+    #return getFigure_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
 
 # Vergleichanalyse-1
 @app.callback(
     Output(component_id='count_year_graph_1', component_property='figure'),
     [Input("year_slider", "value"),
-     Input("month_slider", "value"),
+     Input("month_slider", "value"),     
      Input("si_slider", "value"),
      Input("area_slider", "value"),
      Input("map_size_radio_items", "value"),
@@ -993,8 +1095,8 @@ def plot_events_per_year(year_range, month_range, si_range, area_range, map_size
      Input("interval_radio_items", "value")])
 def plot_events_per_year_1(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                          country_list, interval_radio_items):
-    return getFigure_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
-
+    return getEventsYear_Selector(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
+                         country_list, interval_radio_items)
 
 # Vergleichanalyse-2
 @app.callback(
@@ -1009,8 +1111,9 @@ def plot_events_per_year_1(year_range, month_range, si_range, area_range, map_si
      Input("interval_radio_items_2", "value")])
 def plot_events_per_year_2(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                          country_list, interval_radio_items):
-    return getFigure_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
-
+    #return getFigure_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list, interval_radio_items)
+    return getEventsYear_Selector(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
+                         country_list, interval_radio_items)
 
 
 
@@ -1125,6 +1228,45 @@ def getFigure_map_events_graph(map_events_graph):
     figure = dict(data=data, layout=layout_individual)
     return figure
 
+
+def getFigure_max_events_graph(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    layout_individual = copy.deepcopy(layout)
+
+    tmp = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    tmp = tmp[tmp['event_si'] == tmp['event_si'].max()]
+    
+    data = [
+        dict(
+            type="scatter",
+            mode="lines+markers",
+            name="Area",
+            x=tmp.date,
+            y=tmp.area * 10,
+            line=dict(shape="spline", smoothing=2, color=color_set[1]),
+            marker=dict(symbol="circle"),
+        ),
+        dict(
+            type="scatter",
+            mode="lines+markers",
+            name="Max Precipitation",
+            x=tmp.date,
+            y=tmp.maxPrec,
+            line=dict(shape="spline", smoothing=2, color=color_set[0]),
+            marker=dict(symbol="circle"),
+        ),
+    ]
+    layout_individual["title"] = str('Event with highest severity')
+    layout_individual["legend"] = dict(font=dict(size="12"), orientation="h",y=-0.25)
+    
+    figure = dict(data=data, layout=layout_individual)
+    return figure
+
+
+
+
+
+
+
 # Einzelanalyse
 @app.callback(Output("map_events_graph_einzelanalyse", "figure"), [Input("map_einzelanalyse", "hoverData")])
 def plot_map_events_graph(map_events_graph):
@@ -1139,6 +1281,35 @@ def plot_map_events_graph_1(map_events_graph):
 @app.callback(Output("map_events_graph_2", "figure"), [Input("map_2", "hoverData")])
 def plot_map_events_graph_2(map_events_graph):
     return getFigure_map_events_graph(map_events_graph)
+
+
+
+# Vergleichanalyse 1
+@app.callback(Output("map_max_events_graph_1", "figure"), 
+                  [Input("year_slider", "value"),
+                     Input("month_slider", "value"),
+                     Input("si_slider", "value"),
+                     Input("area_slider", "value"),
+                     Input("map_size_radio_items", "value"),
+                     Input("hours_slider", "value"),
+                     Input("country_selector", "value")])
+def plot_max_events_graph_1(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    return getFigure_max_events_graph(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+
+
+# Vergleichanalyse 2
+@app.callback(Output("map_max_events_graph_2", "figure"), 
+                  [Input("year_slider_2", "value"),
+                      Input("month_slider_2", "value"),
+                      Input("si_slider_2", "value"),
+                      Input("area_slider_2", "value"),
+                      Input("map_size_radio_items_2", "value"),
+                      Input("hours_slider_2", "value"),
+                      Input("country_selector_2", "value")])
+def plot_max_events_graph_2(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
+    return getFigure_max_events_graph(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+
+
 
 
 
