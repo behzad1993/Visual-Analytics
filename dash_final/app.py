@@ -1030,16 +1030,21 @@ def getEventsYear_Selector(year_range, month_range, si_range, area_range, map_si
     
     layout_count = copy.deepcopy(layout)
     dff = filter_events([1979, 2017], month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
-    #dff = filter_events([1979, 2017], [1,12], [0.5,2], [0,5], 'Year', [0,12], ['DE'])
+    #dff = filter_events([1990, 2017], [1,12], [0.5,2], [0,5], 'Year', [0,12], ['DE'])
     #interval_radio_items = 5
     dff = dff.groupby('event_year')['event_id'].nunique().reset_index()
+
+    dff = dff.append({'event_year':1979, 'event_id':0}, ignore_index=True)
+    dff = dff.append({'event_year':2017, 'event_id':0}, ignore_index=True)
+
 
     dff['event_year'] =pd.to_datetime(dff['event_year'], format='%Y')
     dff = dff.groupby(pd.Grouper(key='event_year', freq='Y')).sum(['event_id']).reset_index()
     dff['event_year'] = dff['event_year'].dt.year
-    dff.replace(0.0001,inplace=True)
+    dff.replace(0,0.00001,inplace=True)
   
-    dff_grouped = dff.groupby(dff.index // interval_radio_items).agg({'event_year':min, 'event_id':sum})
+    dff['event_year_max'] = dff['event_year']
+    dff_grouped = dff.groupby(dff.index // interval_radio_items).agg({'event_year':min, 'event_year_max':max, 'event_id':sum})
 
     
     
@@ -1055,6 +1060,7 @@ def getEventsYear_Selector(year_range, month_range, si_range, area_range, map_si
             type="bar",
             x=dff_grouped['event_year'],
             y=dff_grouped["event_id"],
+            text=dff_grouped['event_year_max'],
             name="Events",
             marker=dict(color=colors),
         ),
