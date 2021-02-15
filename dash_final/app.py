@@ -1038,7 +1038,7 @@ def getEventsYear_Selector(year_range, month_range, si_range, area_range, map_si
         if row['event_year'] >= int(year_range[0]) and row['event_year'] < int(year_range[1]):
             colors.append(color_set[1])
         else:
-            colors.append(color_set[4])
+            colors.append('#b8c5d1')
 
     data = [
         dict(

@@ -105,7 +105,6 @@
   }
   .twelve.columns {
     width: 100%;
-    margin-left: 0;
   }
 
   .one-third.column {
@@ -541,9 +540,9 @@ there.
   .five.columns {
     width: calc(100% * 5 / 12);
   }
-  .six.columns {
+/*  .six.columns {
     width: 49.75%;
-  }
+  }*/
   .seven.columns {
     width: calc(100% * 7 / 12);
   }
