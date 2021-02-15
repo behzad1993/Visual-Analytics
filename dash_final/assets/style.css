@@ -24,26 +24,6 @@
   font-size: 13px;
   padding: 0px;
 }
-/* 
-#map_size_radio_items, #interval_radio_items {
-  display: grid;
-}
-*\
-.rc-slider-tooltip-inner {
-    padding: 1px 0px;
-    max-height: 10px;
-    min-width: 20px;
-    font-size: 8px;
-    background-color: #6c6c6c;
-    border-radius: 3px;
-}
-.rc-slider-track {
-    position: absolute;
-    left: 0;
-    height: 4px;
-    border-radius: 6px;
-    background-color: #abe2fb;
-}
 /* filter country selection*/
 .Select--multi .Select-value {
   background-color:  var(--color);
@@ -109,7 +89,7 @@ h1,h3, .switch_label{
 #react-entry-point{
   background-color: var(--bgcolor);
 }
-@media only screen and (min-width: 1200px) {
+@media only screen and (min-width: 1400px) {
   #mainContainer{
     padding-left: 10%;
     padding-right: 10%;

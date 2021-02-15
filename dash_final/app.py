@@ -102,7 +102,7 @@ app.layout = html.Div([
             html.Div(
                 html.Label("Individual analysis"),
                 className="five columns switch_label",
-                style={'textAlign': 'right','font-size':'20px'}
+                style={'textAlign': 'right','font-size':'35px'}
             ),
             html.Div(
 
@@ -120,11 +120,11 @@ app.layout = html.Div([
             html.Div(
                 html.Label("Comparative analysis"),
                 className="five columns switch_label",
-                style={'textAlign': 'left','font-size':'20px'}
+                style={'textAlign': 'left','font-size':'35px'}
             ),
 
         ],
-        className="row flex-display",style={'padding-bottom':'20px'}
+        className="row flex-display",style={'padding-bottom':'35px'}
     ),
 
     # =============================================================================
@@ -1134,7 +1134,7 @@ def getFigure_scatter_mapbox(year_range, month_range, si_range, area_range, map_
                             text='event_id',
                             size="area", size_max=20,
                             zoom=3,
-                            color_continuous_scale=px.colors.sequential.Blues)
+                            color_continuous_scale= ['#9ac4ed',color_set[1]]) 
 
     fig.update_traces(mode='markers', selector=dict(type='scattermapbox'))
     fig.update_layout(
