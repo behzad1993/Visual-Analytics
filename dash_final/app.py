@@ -786,7 +786,7 @@ def filter_events(year_range, month_range, si_range, area_range, map_size_radio_
 
 def plot_pie(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
     layout_pie = copy.deepcopy(layout)
-    si_range = [0, 300]
+    #si_range = [0, 300]
     tmp = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
     tmp = tmp.drop_duplicates(subset='event_id', keep='first')
     tmp = tmp.groupby('label_si').event_id.count().reset_index()
