@@ -1031,7 +1031,10 @@ def getEventsYear_Selector(year_range, month_range, si_range, area_range, map_si
                          country_list, interval_radio_items):
     
     layout_count = copy.deepcopy(layout)
-    dff = filter_events([1979, 2017], month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    dff = data_builder.filter_events([1979, 2017], month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    if dff.size == 0:
+        return {}
+
     #dff = filter_events([1990, 2017], [1,12], [0.5,2], [0,5], 'Year', [0,12], ['DE'])
     #interval_radio_items = 5
     dff = dff.groupby('event_year')['event_id'].nunique().reset_index()

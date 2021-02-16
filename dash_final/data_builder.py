@@ -12,47 +12,57 @@ df: pd.DataFrame
 
 def get_duration_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                           country_list, interval_radio_items):
-    filtered_df = filter_events(year_range, month_range, si_range, area_range, hours_range, country_list)
+    filtered_df = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    if filtered_df.size == 0:
+        return {}
 
     event_property = 'event_length'
-    plot1, plot2, plot3 = build_plots(event_property, filtered_df, interval_radio_items)
+    plot1, plot2, plot3, scale = build_plots(event_property, filtered_df, interval_radio_items)
 
-    return plot_property_per_time_scale(plot1, plot2, plot3, 'Year', 'Duration', 'Duration over time', 'log')
+    return plot_property_per_time_scale(plot1, plot2, plot3, 'Year', 'Duration', 'Duration over time', scale)
 
 
 def get_severity_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                           country_list, interval_radio_items):
-    filtered_df = filter_events(year_range, month_range, si_range, area_range, hours_range, country_list)
+    filtered_df = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    if filtered_df.size == 0:
+        return {}
 
     event_property = 'event_si'
-    plot1, plot2, plot3 = build_plots(event_property, filtered_df,interval_radio_items)
+    plot1, plot2, plot3, scale = build_plots(event_property, filtered_df,interval_radio_items)
 
-    return plot_property_per_time_scale(plot1, plot2, plot3, 'Year', 'Severity', 'Severity over time', 'log')
+    return plot_property_per_time_scale(plot1, plot2, plot3, 'Year', 'Severity', 'Severity over time', scale)
 
 
 def get_area_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                       country_list, interval_radio_items):
-    filtered_df = filter_events(year_range, month_range, si_range, area_range, hours_range, country_list)
+    filtered_df = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    if filtered_df.size == 0:
+        return {}
 
     event_property = 'event_area'
-    plot1, plot2, plot3 = build_plots(event_property, filtered_df, interval_radio_items)
+    plot1, plot2, plot3, scale = build_plots(event_property, filtered_df, interval_radio_items)
 
-    return plot_property_per_time_scale(plot1, plot2, plot3, 'Year', 'Area', 'Area over time', 'log')
+    return plot_property_per_time_scale(plot1, plot2, plot3, 'Year', 'Area', 'Area over time', scale)
 
 
 def get_precipitation_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                                country_list, interval_radio_items):
-    filtered_df = filter_events(year_range, month_range, si_range, area_range, hours_range, country_list)
+    filtered_df = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    if filtered_df.size == 0:
+        return {}
 
     event_property = 'event_pre'
-    plot1, plot2, plot3 = build_plots(event_property, filtered_df, interval_radio_items)
+    plot1, plot2, plot3, scale = build_plots(event_property, filtered_df, interval_radio_items)
 
-    return plot_property_per_time_scale(plot1, plot2, plot3, 'Year', 'Precipitation', 'Precipitation over time', 'log')
+    return plot_property_per_time_scale(plot1, plot2, plot3, 'Year', 'Precipitation', 'Precipitation over time', scale)
 
 
 def get_events_per_year(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                         country_list, grouped_by_country, interval_radio_items):
-    filtered_df = filter_events(year_range, month_range, si_range, area_range, hours_range, country_list)
+    filtered_df = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    if filtered_df.size == 0:
+        return {}
 
     events_filtered = filtered_df.drop_duplicates(subset=['event_id'], keep='first')
     events_filtered = add_year_cluster(interval_radio_items, events_filtered)
@@ -91,9 +101,12 @@ def get_events_per_year(year_range, month_range, si_range, area_range, map_size_
 
 def get_events_per_month(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range,
                          country_list):
-    events_filtered = filter_events(year_range, month_range, si_range, area_range, hours_range, country_list)
+    events_filtered = filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list)
+    if events_filtered.size == 0:
+        return {}
 
     events_per_month_country = events_filtered.groupby(['event_month', 'country'])['event_id'].nunique().reset_index()
+    events_per_month_country = pd.DataFrame(events_per_month_country)
     events_per_month_country.country[~events_per_month_country.country.isin(['DE', 'CZ', 'IT', 'INT', 'TN'])] = 'other'
 
     events_per_month = events_filtered.groupby('event_month')['event_id'].nunique().reset_index()
@@ -114,23 +127,27 @@ def get_events_per_month(year_range, month_range, si_range, area_range, map_size
 
 def init_data():
     global df
-    df = pd.read_pickle("../dash_v1/event_filtered.pickle")
+    # df = pd.read_pickle("../dash_v1/event_filtered.pickle")
+    df = pd.read_pickle("event_filtered.pickle")
+    df.reset_index(inplace=True, drop=True)
+
     # mean precipitation as extra column
-    tmp = df.groupby(['event_id']).meanPre.mean()
-    tmp = pd.DataFrame(tmp).reset_index()
-    tmp = tmp.rename(columns={'event_id': 'event_id', 'meanPre': 'event_pre'})
-    df = pd.merge(tmp, df, on='event_id', how='right')
+    # tmp = df.groupby(['event_id']).meanPre.mean()
+    # tmp = pd.DataFrame(tmp).reset_index()
+    # tmp = tmp.rename(columns={'event_id': 'event_id', 'meanPre': 'event_pre'})
+    # df = pd.merge(tmp, df, on='event_id', how='right')
 
     # exrtacting day from start date and capturing as extra column
     df['day'] = [e.strftime('%Y-%m-%d') for e in df.event_start]
-
+    df['event_si'] = df['event_si'] * 100
+    df['event_area'] = df['event_area'] * 10
     df = df[
         ['event_id', 'event_start', 'event_area', 'event_length', 'event_si', 'event_pre', 'event_year', 'event_month',
          'day', 'country']]
 
 
 # read once at initialization of webserver and on every change
-def filter_events(year_range, month_range, si_range, area_range, hours_range, country_list):
+def filter_events(year_range, month_range, si_range, area_range, map_size_radio_items, hours_range, country_list):
     filtered_data = df[df["country"].isin(country_list)]
     filtered_data = filtered_data[
         (filtered_data['event_year'] >= year_range[0]) & (filtered_data['event_year'] <= year_range[1])]
@@ -150,18 +167,17 @@ def add_year_cluster(interval_radio_items, filtered_df):
     events_filtered = events_filtered.reset_index(drop=True)
     year = events_filtered['event_year'].min()
     j = year + round(interval_radio_items / 2)
-    k = 0
 
     df_length = len(events_filtered.index)
     for i in range(df_length):
-        events_filtered.at[i, 'year_cluster'] = j
         tmp = events_filtered['event_year'].values[i]
         if year < tmp:
-            k = k + 1
-            year = tmp
-        if k == interval_radio_items:
-            k = 0
-            j = j + interval_radio_items
+            delta_year = tmp - year
+            quotient_interval = delta_year / interval_radio_items
+            j = j + (np.math.trunc(quotient_interval) * interval_radio_items)
+            year = year + (np.math.trunc(quotient_interval) * interval_radio_items)
+
+        events_filtered.at[i, 'year_cluster'] = j
 
     return events_filtered
 
@@ -169,13 +185,22 @@ def add_year_cluster(interval_radio_items, filtered_df):
 def build_plots(event_property, filtered_df, interval_radio_items):
     avg_area = get_avg(filtered_df, event_property)
     max_area = get_max(filtered_df, event_property)
-    cluster_area = get_cluster(filtered_df, event_property, interval_radio_items)
+
+    if max_area[event_property].max() - avg_area[event_property].min() > 20:
+        scale = "log"
+    else:
+        scale = "linear"
+
 
     plot1 = Plot(avg_area.event_year, avg_area[event_property], 'Average')
     plot2 = Plot(max_area.event_year, max_area[event_property], 'Max')
-    plot3 = Plot(cluster_area.year_cluster, cluster_area.avg_per_cluster, "avg every {} years".format(interval_radio_items))
 
-    return plot1, plot2, plot3
+    plot3 = None
+    if interval_radio_items > 1:
+        cluster_area = get_cluster(filtered_df, event_property, interval_radio_items)
+        plot3 = Plot(cluster_area.year_cluster, cluster_area.avg_per_cluster, "avg every {} years".format(interval_radio_items))
+
+    return plot1, plot2, plot3, scale
 
 
 def get_max(filtered_df, event_property):
